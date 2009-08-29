@@ -5,18 +5,16 @@ class AddNotifications < ActiveRecord::Migration
       t.integer :source_id, :subscriber_id
       t.timestamps
     end
-
-    change_table :users do |t|
-      t.text :cool_event_subscriptions, :cool_email_subscriptions
-    end    
+    
+    create_table :cool_event_subscriptions do |t|
+      t.integer :subscriber_id
+      t.string :cool_event_type
+      t.boolean :wants_emails, :default => true
+    end
   end
   
   def self.down
-    change_table :users do |t|
-      t.remove :cool_event_subscriptions
-      t.remove :cool_email_subscriptions
-    end
-
+    drop_table :cool_event_subscriptions
     drop_table :cool_events
   end
 end

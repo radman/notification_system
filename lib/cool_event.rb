@@ -21,7 +21,7 @@ class CoolEvent < ActiveRecord::Base
     protected
 
     def subscribers_to(source)
-      User.find_by_sql "SELECT * FROM users WHERE cool_event_subscriptions LIKE '%#{self.to_s}%'"
+      CoolEventSubscription.of_type(self).collect(&:subscriber)
     end
     
     private
@@ -32,6 +32,10 @@ class CoolEvent < ActiveRecord::Base
       end      
     end
     
+  end
+  
+  def subscription
+    subscriber.cool_event_subscriptions.find_by_cool_event_type(self.class.to_s)
   end
   
   def send_email_notification
