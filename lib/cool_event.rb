@@ -13,9 +13,14 @@ class CoolEvent < ActiveRecord::Base
       end      
     end  
 
+    # TODO: This should only be available on base class?
     def types
       load_subclasses if @@types.empty?
       @@types
+    end
+
+    def title
+      self.class.to_s.gsub(/Event$/, '').underscore.gsub(/_/,' ')
     end
 
     protected
