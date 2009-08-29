@@ -3,9 +3,9 @@ module Notifications
     
     def self.included(base)
       base.class_eval do
-        include CoolEventSubscriber
+        include EventSubscriber
 
-        has_many :cool_events, :foreign_key => 'subscriber_id', :dependent => :destroy
+        has_many :events, :foreign_key => 'subscriber_id', :dependent => :destroy
       end
     end   
         

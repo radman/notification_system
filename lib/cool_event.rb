@@ -21,13 +21,13 @@ class CoolEvent < ActiveRecord::Base
     protected
 
     def subscribers_to(source)
-      CoolEventSubscription.of_type(self).collect(&:subscriber)
+      EventSubscription.of_type(self).collect(&:subscriber)
     end
     
     private
     
     def load_subclasses
-      Dir[RAILS_ROOT + '/app/models/cool_events/*_cool_event.rb'].each do |file|
+      Dir[RAILS_ROOT + '/app/models/events/*_event.rb'].each do |file|
         @@types << File.basename(file, '.rb').camelize.constantize
       end      
     end
@@ -35,11 +35,11 @@ class CoolEvent < ActiveRecord::Base
   end
   
   def subscription
-    subscriber.cool_event_subscriptions.find_by_cool_event_type(self.class.to_s)
+    subscriber.event_subscriptions.find_by_event_type(self.class.to_s)
   end
   
   def send_email_notification
-    method_name = 'deliver_' + self.class.to_s.gsub(/CoolEvent$/, '').underscore
+    method_name = 'deliver_' + self.class.to_s.gsub(/Event$/, '').underscore
     NotificationMailer.send(method_name, self)
   end 
   
