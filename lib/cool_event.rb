@@ -20,7 +20,7 @@ class CoolEvent < ActiveRecord::Base
     end
 
     def title
-      self.class.to_s.gsub(/Event$/, '').underscore.gsub(/_/,' ')
+      self.to_s.gsub(/Event$/, '').underscore.gsub(/_/,' ')
     end
 
     protected
