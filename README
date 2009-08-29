@@ -1,0 +1,45 @@
+Notifications
+=============
+
+The Noomii notification system!
+
+
+Usage
+=====
+
+To install:
+
+script/generate notifications_migration
+rake db:migrate
+
+To create new events:
+
+script/generate cool_event <name_of_event>
+
+This will generate a class in app/models/cool_events, and a mailer view in app/views/notification_mailer.
+
+To trigger events:
+
+EventName.trigger :source => source_object
+
+To subscribe/unsubscribe to events, emails:
+
+user.subscribe_to_cool_event(EventName)
+user.unsubscribe_from_cool_event(EventName)
+user.subscribe_to_cool_email(EventName)
+user.unsubscribe_from_cool_email(EventName)
+
+To check subscription:
+
+user.subscribed_to_cool_event?(EventName)
+user.subscribed_to_cool_email?(EventName)
+
+To customize conditions for checking whether a user is subscribed, override Event.subscribers (a protected method), in your event subclasses.
+
+Example
+=======
+
+Example goes here.
+
+
+Copyright (c) 2009 [name of plugin creator], released under the MIT license
