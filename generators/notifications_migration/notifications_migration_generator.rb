@@ -7,7 +7,7 @@ class NotificationsMigrationGenerator < Rails::Generator::Base
   end
   
   def file_name
-    'add_notifications'
+    'add_cool_notifications'
   end
   
 end

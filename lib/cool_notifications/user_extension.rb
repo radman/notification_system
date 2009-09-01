@@ -1,4 +1,4 @@
-module Notifications
+module CoolNotifications
   module UserExtension
     
     def self.included(base)

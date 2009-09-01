@@ -1,4 +1,4 @@
-module Notifications
+module CoolNotifications
   module EventSubscriber
     def self.included(base)
       base.class_eval do        
