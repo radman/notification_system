@@ -15,12 +15,17 @@ class AddCoolNotifications < ActiveRecord::Migration
     
     create_table :notifications do |t|
       t.string :type
-      t.integer :event_id, :event_type_subscription_id
+      t.integer :event_id, :subscription_id
+      
+      t.datetime :start_date, :end_date
+      t.integer :interval, :times_sent, :default => 0
+      
       t.timestamps
     end
   end
   
   def self.down
+    drop_table :notifications
     drop_table :event_type_subscriptions
     drop_table :cool_events
   end
