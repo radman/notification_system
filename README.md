@@ -3,26 +3,28 @@ Notifications
 
 The Noomii notification system!
 
-
-Usage
------
-
-To install:
+Installation
+------------
 
     script/generate notifications_migration
     rake db:migrate
 
-To create new events:
+Usage
+-----
+
+### Creating New Events ###
 
     script/generate event NewUser
 
 This will generate `app/models/events/new_user_event.rb`, and `app/views/notification_mailer/new_user.erb`
 
-To trigger events:
+### Triggering Events ###
 
     NewUserEvent.trigger :source => source_object
 
-To subscribe/unsubscribe to events:
+### Event Subscription ###
+
+To subscribe / unsubscribe to events:
 
     user.subscribe_to_event(NewUserEvent)
     user.unsubscribe_from_event(NewUserEvent)
