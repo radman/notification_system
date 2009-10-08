@@ -5,12 +5,12 @@ The Noomii notification system!
 
 
 Usage
-=====
+-----
 
 To install:
 
-  script/generate notifications_migration
-  rake db:migrate
+    script/generate notifications_migration
+    rake db:migrate
 
 To create new events:
 
@@ -37,8 +37,10 @@ To check subscription:
 
 To customize conditions for checking whether a user is subscribed, override CoolEvent.subscribers (a protected method), in your event subclasses.
 
+
 Naming Scheme
-=============
+-------------
+
 The event base clase is called CoolEvent because there already exists an Event class; however, we still use Event instead of CoolEvent whereever we can.
 
 Copyright (c) 2009 Radu Vlad, released under the MIT license
