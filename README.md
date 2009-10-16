@@ -3,54 +3,51 @@ Notifications
 
 The Noomii notification system!
 
+Note: This plugin does not handle scheduling.
+
 TODO
 ----
 
 1. add configuration class for things like mailer
 2. update this README
 3. rename plugin!
-4. notifications should be associated to events
+4. notifications should be associated to events (the association should be optional)
+5. new spec: pending cannot include notifications that have already been sent
 
 Installation
 ------------
 
-    script/generate notifications_migration
+    script/generate notification_system_migration
     rake db:migrate
 
 Usage
 -----
 
-### Creating New Events ###
+### Creating New Notification Types (TODO) ###
+
+    script/generate notification new_comment
+    
+This will generate `app/models/notifications/new_comment_notification.rb`
+
+### Creating New Events (TOFIX) ###
 
     script/generate event NewUser
 
-This will generate `app/models/events/new_user_event.rb`, and `app/views/notification_mailer/new_user.erb`
+This will generate `app/models/events/new_user_event.rb`
 
 ### Triggering Events ###
 
     NewUserEvent.trigger :source => source_object
+    
+### Creating Notifications ###
 
-### Event Subscription ###
+Notifications require a recipient and a date, and can optionally be associated to an event.
 
-To subscribe / unsubscribe to events:
+    NewCommentNotification.create! :recipient => some_user, :date => Time.now
 
-    user.subscribe_to_event(NewUserEvent)
-    user.unsubscribe_from_event(NewUserEvent)
+### Notification Subscription ###
 
-To subscribe without email:
+    user.notification_types = [:new_comment_notification, :tagged_in_photo_notification]
 
-    user.subscribe_to_event(NewUserEvent, false)
-
-To check subscription:
-
-    user.subscribed_to_event?(EventName)
-
-To customize conditions for checking whether a user is subscribed, override `CoolEvent.subscribers` (a protected method), in your event subclasses.
-
-
-Naming Scheme
--------------
-
-The event base clase is called `CoolEvent` because there already exists an `Event` class; however, we still use `Event` instead of `CoolEvent` whereever we can.
 
 Copyright (c) 2009 Radu Vlad, released under the MIT license
