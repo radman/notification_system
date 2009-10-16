@@ -1,6 +1,8 @@
 module NotificationSystem
   class Notification < ActiveRecord::Base
     belongs_to :recipient, :class_name => 'User'
+    belongs_to :event
+    
     validates_presence_of :recipient_id, :date
     named_scope :pending, lambda { { :conditions => ['date <= ?', Time.now] } }
         

@@ -6,6 +6,8 @@ class UpcomingCoachingSessionNotification < NotificationSystem::Notification; en
 class NewCoachingSessionNotification < NotificationSystem::Notification; end
 
 # Events
+class RandomEvent < NotificationSystem::Event; end
+  
 class NewCoachingSessionEvent < NotificationSystem::Event
   def after_create
     coaching_session = self.source
@@ -15,11 +17,11 @@ class NewCoachingSessionEvent < NotificationSystem::Event
       coaching_relationship.coachee :
       coaching_relationship.coach    
     
-    NewCoachingSessionNotification.create! :date => Time.now, :recipient => other_user
-    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach
-    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee
-    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach
-    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee    
+    NewCoachingSessionNotification.create! :date => Time.now, :recipient => other_user, :event => self
+    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach, :event => self
+    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee, :event => self
+    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach, :event => self
+    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee, :event => self
   end
 end
 

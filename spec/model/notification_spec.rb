@@ -102,4 +102,10 @@ describe "Notification" do
     
   end
 
+  describe "event association" do
+    it "should allow associating any type of events" do
+      RandomNotification.create! :recipient => User.create!, :date => Time.now, :event => RandomEvent.create!
+      RandomNotification.last.event.should be_instance_of(RandomEvent)
+    end
+  end
 end

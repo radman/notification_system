@@ -61,26 +61,7 @@ describe "Notification System" do
         RandomNotification.count(:conditions => { :recipient_id => @jerry.id, :date => @coaching_session_date - 1.day })
       }.from(0).to(1)
     end
-    
-    describe "and Jerry and Radu have the following set of notification settings" do
       
-      # Notification Types
-      # - someone has scheduled a coaching session with you (Jerry wants to receive these, Radu doesn't)
-      # - you have a session scheduled a day from now (Jerry does not want to receive these, and Radu does)
-      # - random notification a day before a session is due (you always receive these)
-      
-      before(:each) do
-        # Method Name
-        # - can't call it "notifications" because we're associating to a type of notification
-        
-        # @radu.notification_types = [:upcoming_coaching_session, :random]
-        # @jerry.notification_types = [:new_coaching_session, :random]
-      end
-      
-      # time tests are likely to contain some error
-            
-    end
-    
   end
   
   

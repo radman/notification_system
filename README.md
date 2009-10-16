@@ -9,8 +9,7 @@ TODO
 ----
 
 1. update this README
-2. notifications should be associated to events (the association should be optional)
-3. new spec: pending cannot include notifications that have already been sent
+2. new spec: pending cannot include notifications that have already been sent
 
 Installation
 ------------
