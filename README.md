@@ -8,8 +8,8 @@ Note: This plugin does not handle scheduling.
 TODO
 ----
 
-1. update this README
-2. new spec: pending cannot include notifications that have already been sent
+1. improve this README file
+2. add recurring notification
 
 Installation
 ------------
