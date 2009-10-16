@@ -29,16 +29,28 @@ describe "Notification" do
       notification = RandomNotification.create! :date => Time.now + 2.days, :recipient => User.create!
       Notification.pending.should be_empty
     end
-  
+      
+    it "should not be pending if it has already been sent, even if the current time is equal to the start date" do
+      notification = RandomNotification.create! :date => Time.now, :recipient => User.create!
+      notification.deliver
+      Notification.pending.should have(0).records
+    end
+    
+    it "should not be pending if it has already been sent, even if the current time is after the start date" do
+      notification = RandomNotification.create! :date => Time.now - 2.days, :recipient => User.create!
+      notification.deliver
+      Notification.pending.should have(0).records      
+    end
+
     it "should be pending if the current time is equal to its start_date" do
       notification = RandomNotification.create! :date => Time.now, :recipient => User.create!
       Notification.pending.should have(1).record
     end
-
+    
     it "should be pending if the current time is after its start_date" do
       notification = RandomNotification.create! :date => Time.now - 2.days, :recipient => User.create!
       Notification.pending.should have(1).record
-    end    
+    end
   end
 
   describe "delivering" do

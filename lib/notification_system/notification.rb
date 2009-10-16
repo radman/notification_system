@@ -4,7 +4,7 @@ module NotificationSystem
     belongs_to :event
     
     validates_presence_of :recipient_id, :date
-    named_scope :pending, lambda { { :conditions => ['date <= ?', Time.now] } }
+    named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
         
     def deliver
       Notification.mailer_class.send("deliver_#{self.class.template_name}", self)
