@@ -94,9 +94,10 @@ describe "Notification" do
       @radu = User.create! :notification_types => [:new_coaching_session_notification, :upcoming_coaching_session_notification]
       
       @pending_wanted = []
-      
+      @pending_unwanted = []
+
       3.times do 
-        RandomNotification.create! :recipient => @radu, :date => Time.now - 2.days
+        @pending_unwanted << RandomNotification.create!(:recipient => @radu, :date => Time.now - 2.days)
         @pending_wanted << NewCoachingSessionNotification.create!(:recipient => @radu, :date => Time.now - 30.seconds)
       end
       
@@ -110,6 +111,11 @@ describe "Notification" do
       sent_notifications = Notification.all.select { |x| !x.sent_at.nil? }
       
       sent_notifications.collect(&:id).sort.should == @pending_wanted.collect(&:id).sort
+    end
+    
+    it "deliver pending should result in zero remaining pending notifications" do
+      Notification.deliver_pending
+      Notification.pending.should have(0).records
     end
     
   end

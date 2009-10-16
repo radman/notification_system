@@ -16,7 +16,11 @@ module NotificationSystem
              
       def deliver_pending
         pending.each do |notification|
-          notification.deliver if notification.recipient.wants_notification?(notification)
+          if notification.recipient.wants_notification?(notification) 
+            notification.deliver
+          else
+            notification.destroy
+          end
         end
       end
 
