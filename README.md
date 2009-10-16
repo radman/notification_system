@@ -3,6 +3,14 @@ Notifications
 
 The Noomii notification system!
 
+TODO
+----
+
+1. add configuration class for things like mailer
+2. update this README
+3. rename plugin!
+4. notifications should be associated to events
+
 Installation
 ------------
 

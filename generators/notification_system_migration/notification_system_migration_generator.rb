@@ -1,4 +1,4 @@
-class NotificationsMigrationGenerator < Rails::Generator::Base
+class NotificationSystemMigrationGenerator < Rails::Generator::Base
   
   def manifest
     record do |r|
@@ -7,7 +7,7 @@ class NotificationsMigrationGenerator < Rails::Generator::Base
   end
   
   def file_name
-    'add_cool_notifications'
+    'add_notification_system'
   end
   
 end
