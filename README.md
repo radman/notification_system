@@ -24,9 +24,11 @@ Domain
 
 ### Notifications ###
 
-A notification represents a bunch of information scheduled to be delivered to a particular user. A notification may be associated to an event.
+A notification represents a bunch of information scheduled to be delivered to a particular user. A notification may be associated to an event, and users can subscribe / unsubscribe to any notification.
 
-Users can subscribe / unsubscribe to any notification. 
+A notification is considered pending on and after its scheduled delivery date. Notifications are NOT sent automatically. You will need to use a scheduler of some sort to periodically call `Notification.deliver_pending`. This will grab all pending notifications, and deliver them to their recipients IF they are subscribed to receive that type of notification. IF they are not subscribed, the pending notification is destroyed (TODO).
+
+Delivery assumes the existence of a `NotificationMailer`. (TODO: make more general - allow configuration options). The mailer method name will have to correspond to the notification class name. For example, a notification class called `NewCommentNotification` will try to use the `new_comment_notification` mailer method.
 
 TODO: explain this a bit better
 
