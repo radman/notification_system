@@ -8,11 +8,9 @@ Note: This plugin does not handle scheduling.
 TODO
 ----
 
-1. add configuration class for things like mailer
-2. update this README
-3. 
-3. notifications should be associated to events (the association should be optional)
-4. new spec: pending cannot include notifications that have already been sent
+1. update this README
+2. notifications should be associated to events (the association should be optional)
+3. new spec: pending cannot include notifications that have already been sent
 
 Installation
 ------------
@@ -29,7 +27,11 @@ A notification represents a bunch of information scheduled to be delivered to a 
 
 A notification is considered pending on and after its scheduled delivery date. Notifications are NOT sent automatically. You will need to use a scheduler of some sort to periodically call `Notification.deliver_pending`. This will grab all pending notifications, and deliver them to their recipients IF they are subscribed to receive that type of notification. IF they are not subscribed, the pending notification is destroyed (TODO).
 
-Delivery assumes the existence of a `NotificationMailer`. (TODO: make more general - allow configuration options). The mailer method name will have to correspond to the notification class name. For example, a notification class called `NewCommentNotification` will try to use the `new_comment_notification` mailer method.
+Delivery assumes the existence of a `NotificationMailer`. To modify the mailer do something like the following:
+
+    NotificationSystem::Notification.mailer = :user_mailer
+
+The mailer method name will have to correspond to the notification class name. For example, a notification class called `NewCommentNotification` will try to use the `new_comment_notification` mailer method.
 
 TODO: explain this a bit better
 

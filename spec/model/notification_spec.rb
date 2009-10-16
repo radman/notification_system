@@ -43,6 +43,10 @@ describe "Notification" do
 
   describe "delivering" do
     describe "mailer" do
+      before(:each) do
+        Notification.mailer = nil
+      end
+
       it "should be :notification_mailer by default" do
         Notification.mailer.should == :notification_mailer
       end
@@ -53,14 +57,14 @@ describe "Notification" do
       end
       
       it "mailer_class method should match the mailer" do
-        Notification.mailer == :user_mailer
+        Notification.mailer = :user_mailer
         Notification.mailer_class.should == UserMailer
       end
     end
     
     # TODO: notification.deliver should send an email via NotificationMailer.deliver_notification_template_name(self)
     it "deliver should send an email via mailer_class.deliver_[template_name](notification)" do
-      Notification.mailer == :user_mailer
+      Notification.mailer = :user_mailer
       notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
       UserMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
       notification.deliver

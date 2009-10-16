@@ -5,7 +5,7 @@ module NotificationSystem
     named_scope :pending, lambda { { :conditions => ['date <= ?', Time.now] } }
         
     def deliver
-      self.class.mailer_class.send("deliver_#{self.class.template_name}", self)
+      Notification.mailer_class.send("deliver_#{self.class.template_name}", self)
       self.update_attributes!(:sent_at => Time.now)
     end
 
