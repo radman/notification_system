@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "Notification" do
+  before (:all) do
+    NotificationMailer = mock("notification mailer", :null_object => true) unless defined?(NotificationMailer)
+    UserMailer = mock("user mailer", :null_object => true) unless defined?(UserMailer)
+  end
 
   it "should be invalid without a recipient even if a date is specified" do
     notification = Notification.new :date => Time.now
@@ -38,8 +42,24 @@ describe "Notification" do
   end
 
   describe "delivering" do
+    describe "mailer" do
+      it "should be :notification_mailer by default" do
+        Notification.mailer.should == :notification_mailer
+      end
+      
+      it "should be changeable" do
+        Notification.mailer = :user_mailer
+        Notification.mailer.should == :user_mailer
+      end
+      
+      it "mailer_class method should match the mailer" do
+        Notification.mailer == :user_mailer
+        Notification.mailer_class.should == UserMailer
+      end
+    end
+    
     # TODO: notification.deliver should send an email via NotificationMailer.deliver_notification_template_name(self)
-    it "deliver should send an email via NotificationMailer.deliver_[template_name](notification)" do
+    it "deliver should send an email via mailer_class.deliver_[template_name](notification)" do
       notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
       NotificationMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
       notification.deliver

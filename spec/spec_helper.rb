@@ -19,7 +19,6 @@ Spec::Runner.configure do |config|
   end
 
   config.before(:each) do
-    NotificationMailer = mock("notification mailer", :null_object => true) unless defined?(NotificationMailer)
     reset_tables
   end
   
@@ -63,10 +62,10 @@ Spec::Runner.configure do |config|
   end      
         
   def load_plugin_classes
-    require "lib/user_extension"
-    require "lib/notification"  
-    require "lib/event"
-    include NotificationSystem    
+    require "lib/notification_system/user_extension"
+    require "lib/notification_system/notification"  
+    require "lib/notification_system/event"
+    include NotificationSystem
   end
   
   def load_spec_classes
