@@ -1,5 +1,5 @@
-Notifications
-=============
+Notification System
+===================
 
 The Noomii notification system!
 
