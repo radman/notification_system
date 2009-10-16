@@ -49,4 +49,21 @@ Notifications require a recipient and a date, and can optionally be associated t
     user.notification_types = [:new_comment_notification, :tagged_in_photo_notification]
 
 
+Notifications
+-------------
+
+A notification represents a bunch of information scheduled to be delivered to a particular user. A notification may be associated to an event.
+
+Users can subscribe / unsubscribe to any notification. 
+
+TODO: explain this a bit better
+
+Events
+-------
+
+Events help in associating a particular context to a notification. In addition, they help organize the notification creation.
+
+TODO: explain this a bit better
+
+
 Copyright (c) 2009 Radu Vlad, released under the MIT license
