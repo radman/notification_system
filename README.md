@@ -10,9 +10,8 @@ TODO
 
 1. add configuration class for things like mailer
 2. update this README
-3. rename plugin!
-4. notifications should be associated to events (the association should be optional)
-5. new spec: pending cannot include notifications that have already been sent
+3. notifications should be associated to events (the association should be optional)
+4. new spec: pending cannot include notifications that have already been sent
 
 Installation
 ------------
