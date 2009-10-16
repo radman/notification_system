@@ -10,6 +10,8 @@ TODO
 
 1. improve this README file
 2. add recurring notification
+3. on deliver_pending, destroy notifications that are pending but unsubscribed
+4. fix generators
 
 Installation
 ------------
@@ -24,7 +26,7 @@ Domain
 
 A notification represents a bunch of information scheduled to be delivered to a particular user. A notification may be associated to an event, and users can subscribe / unsubscribe to any notification.
 
-A notification is considered pending on and after its scheduled delivery date. Notifications are NOT sent automatically. You will need to use a scheduler of some sort to periodically call `Notification.deliver_pending`. This will grab all pending notifications, and deliver them to their recipients IF they are subscribed to receive that type of notification. IF they are not subscribed, the pending notification is destroyed (TODO).
+A notification is considered pending on and after its scheduled delivery date, if it has not been sent. Notifications are NOT sent automatically. You will need to use a scheduler of some sort to periodically call `Notification.deliver_pending`. This will grab all pending notifications, and deliver them to their recipients IF they are subscribed to receive that type of notification. IF they are not subscribed, the pending notification is destroyed.
 
 Delivery assumes the existence of a `NotificationMailer`. To modify the mailer do something like the following:
 
