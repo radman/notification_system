@@ -60,8 +60,9 @@ describe "Notification" do
     
     # TODO: notification.deliver should send an email via NotificationMailer.deliver_notification_template_name(self)
     it "deliver should send an email via mailer_class.deliver_[template_name](notification)" do
+      Notification.mailer == :user_mailer
       notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
-      NotificationMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
+      UserMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
       notification.deliver
     end
     
