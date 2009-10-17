@@ -10,7 +10,7 @@ TODO
 
 1. improve this README file
 2. add recurring notification
-3. fix generators
+3. figure out how to integrate with flash notifications
 
 Installation
 ------------
@@ -45,13 +45,13 @@ TODO: explain this a bit better
 Usage
 -----
 
-### Creating New Notification Types (TODO) ###
+### Generating New Notification Types ###
 
     script/generate notification new_comment
     
 This will generate `app/models/notifications/new_comment_notification.rb`
 
-### Creating New Events (TOFIX) ###
+### Generating New Event Types ###
 
     script/generate event new_user
 
