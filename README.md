@@ -10,8 +10,7 @@ TODO
 
 1. improve this README file
 2. add recurring notification
-3. on deliver_pending, destroy notifications that are pending but unsubscribed
-4. fix generators
+3. fix generators
 
 Installation
 ------------
@@ -54,7 +53,7 @@ This will generate `app/models/notifications/new_comment_notification.rb`
 
 ### Creating New Events (TOFIX) ###
 
-    script/generate event NewUser
+    script/generate event new_user
 
 This will generate `app/models/events/new_user_event.rb`
 

@@ -2,19 +2,24 @@
 #   - remove noomii specific tests and tables
 #   - see if there's a better way to handle transactions
 
-$: << File.expand_path(__FILE__).split('/')[0..-3].join('/') # root of the plugin
+NOTIFICATION_ROOT = File.expand_path(__FILE__).split('/')[0..-3].join('/')
+$: << NOTIFICATION_ROOT
 
 require 'active_record'
+require 'rails_generator'
+require 'rails_generator/scripts/generate'
 
 Spec::Runner.configure do |config|
   config.before(:suite) do
     setup_database
+    setup_generators
     load_plugin_classes
     load_spec_classes
     stub_current_time
   end
 
   config.after(:suite) do
+    teardown_generators
     teardown_database   
   end
 
@@ -56,6 +61,15 @@ Spec::Runner.configure do |config|
     User.delete_all 
   end
 
+  def setup_generators
+    FileUtils.mkdir_p(fake_rails_root)    
+    Rails::Generator::Base.sources << Rails::Generator::PathSource.new(:notification_system, File.join(NOTIFICATION_ROOT, "generators"))    
+  end
+  
+  def teardown_generators
+    FileUtils.rm_r(fake_rails_root)
+  end
+
   def stub_current_time
     current_time = Time.now
     Time.stub!(:now).and_return(current_time)
@@ -76,6 +90,13 @@ Spec::Runner.configure do |config|
     require "generators/notification_system_migration/templates/migration"    
   end
   
+  def fake_rails_root
+    File.join(File.dirname(__FILE__), 'rails_root')
+  end
+  
+  def file_list
+    Dir.glob(File.join(fake_rails_root, '**', '*'))
+  end  
 end
 
 
