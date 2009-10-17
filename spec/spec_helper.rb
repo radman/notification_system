@@ -62,12 +62,12 @@ Spec::Runner.configure do |config|
   end
 
   def setup_generators
-    FileUtils.mkdir_p(fake_rails_root)    
+    FileUtils.mkdir_p(fake_rails_root) unless File.exists?(fake_rails_root)
     Rails::Generator::Base.sources << Rails::Generator::PathSource.new(:notification_system, File.join(NOTIFICATION_ROOT, "generators"))    
   end
   
   def teardown_generators
-    FileUtils.rm_r(fake_rails_root)
+    FileUtils.rm_r(fake_rails_root) if File.exists?(fake_rails_root)
   end
 
   def stub_current_time
