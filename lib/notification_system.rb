@@ -1,5 +1,7 @@
 require 'action_view'
 
+$: << File.expand_path(__FILE__).split('/')[0..-3].join('/') # append plugin root to load path
+
 module NotificationSystem
   autoload :Event, 'lib/notification_system/event'
   autoload :Notification, 'lib/notification_system/notification'
