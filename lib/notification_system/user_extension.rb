@@ -26,10 +26,10 @@ module NotificationSystem
           errors.add :notification_types, " must either be nil or an array of symbols to notification subclasses of Notification"
         elsif !self.notification_types.empty?
           # INVARIANT: notification_types is a non-empty array
-          if !self.notification_types.select { |x| !x.is_a?(Symbol) }.empty? # check that it's only symbols
+          if !self.notification_types.select { |x| !x.is_a?(Symbol) && !x.is_a?(String) }.empty? # check that it's only symbols/strings
             errors.add :notification_types, " must either be nil or an array of symbols corresponding to subclasses of Notification" 
           else
-            # INVARIANT: notification_types is a non-empty array of symbols
+            # INVARIANT: notification_types is a non-empty array of symbols/strings
             invalid_references = self.notification_types.select do |x|
               begin
                 cls = Module.const_get(x.to_s.classify)

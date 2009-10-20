@@ -38,6 +38,11 @@ describe "UserExtension" do
       radu.should be_valid
     end
 
+    it "should be valid if notification_types is set to an array of strings corresponding to subclasses of Notification" do
+      radu = User.new :notification_types => ['new_coaching_session_notification', 'random_notification', 'upcoming_coaching_session_notification']
+      radu.should be_valid
+    end    
+
     it "should be valid if notification_types is set to nil" do
       radu = User.create! :notification_types => []
       radu.notification_types = nil
