@@ -24,6 +24,14 @@ module NotificationSystem
         end
       end
 
+      def subclasses
+        classes = []
+        ObjectSpace.each_object(Class) do |cls|
+          classes << cls if cls.superclass == self
+        end
+        classes
+      end
+      
       def mailer
         @mailer || :notification_mailer
       end

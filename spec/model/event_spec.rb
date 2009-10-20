@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "Event" do
-  
   describe "trigger" do
     it "should create an event when" do
       lambda {

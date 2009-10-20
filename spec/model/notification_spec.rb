@@ -126,4 +126,14 @@ describe "Notification" do
       RandomNotification.last.event.should be_instance_of(RandomEvent)
     end
   end
+
+  describe "subclasses method" do
+    it "should get all and only subclasses of Notification class" do
+      subclasses = Notification.subclasses
+      subclasses.size.should == 3
+      subclasses.should include(RandomNotification)
+      subclasses.should include(UpcomingCoachingSessionNotification)
+      subclasses.should include(NewCoachingSessionNotification)
+    end
+  end
 end
