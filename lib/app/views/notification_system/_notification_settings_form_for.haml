@@ -1,0 +1,10 @@
+- form_for user, :id => 'notification_settings_form' do |f|
+  - # this is necessary in rails 2.3.4 because we can't send an empty array (see rails docs for check_box_tag)
+  = hidden_field_tag 'updating_notification_types', true
+
+  - NotificationSystem::Notification.types.each do |n|
+    %div
+      = check_box_tag 'user[notification_types][]', n.to_s.underscore.downcase, current_user.notification_types && (current_user.notification_types.include?(n.to_s.underscore.downcase.to_sym) || current_user.notification_types.include?(n.to_s.underscore.downcase.to_s)), :id => n.to_s.underscore.downcase
+      = label_tag n.to_s.underscore.downcase
+      
+  %div= submit_tag
