@@ -59,13 +59,17 @@ This will generate `app/models/events/new_user_event.rb`
 
 ### Triggering Events ###
 
-    NewUserEvent.trigger :source => source_object
+    NewUserEvent.trigger :source => source_object, :arg1 => 'blah', :arg2 => [1,2,3], ..., :argn => 'wow'
+    
+If successful, this will create a new event instance with a `source`. If no extra arguments are specified, it will be created with a nil data attribute. If extra arguments are specified, the data attribute will contain a serialized hash of the extra arguments.
+
+TODO: explain better
     
 ### Creating Notifications ###
 
 Notifications require a recipient and a date, and can optionally be associated to an event.
 
-    NewCommentNotification.create! :recipient => some_user, :date => Time.now
+    NewCommentNotification.create! :recipient => some_user, :date => Time.now, :event => random_event_instance
 
 ### Notification Subscription ###
 

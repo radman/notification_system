@@ -1,7 +1,7 @@
 class AddNotificationSystem < ActiveRecord::Migration
   def self.up
     create_table :events do |t|
-      t.string :type, :source_type
+      t.string :type, :source_type, :data
       t.integer :source_id
       t.timestamps
     end
