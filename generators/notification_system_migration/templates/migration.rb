@@ -19,8 +19,10 @@ class AddNotificationSystem < ActiveRecord::Migration
   end
   
   def self.down
+    change_table :users do |t|
+      t.remove :notification_types
+    end
     drop_table :notifications
-    drop_table :event_type_subscriptions
-    drop_table :cool_events
+    drop_table :events
   end
 end
