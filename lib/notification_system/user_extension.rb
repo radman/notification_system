@@ -27,7 +27,7 @@ module NotificationSystem
       is_an_array = !self.notification_types.is_a?(Array)
       
       if !self.notification_types.nil?
-        if !self.notification_types.is_a?(Array)
+        if !self.notification_types.is_a?(Array) && !(self.notification_types == [''])
           errors.add :notification_types, " must either be nil or an array of symbols to notification subclasses of Notification"
         elsif !self.notification_types.empty?
           # INVARIANT: notification_types is a non-empty array

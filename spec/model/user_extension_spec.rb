@@ -33,9 +33,9 @@ describe "UserExtension" do
       radu.should be_valid
     end
     
-    it "setting it to an empty string array should make it nil" do
-      radu = User.new
-      radu.notification_types = ['']
+    it "setting it to an empty string array should make it nil; should especially work when saving with mass attributes" do
+      radu = User.create! :notification_types => [:new_coaching_session_notification]
+      radu.update_attributes(:notification_types => [''])
       radu.notification_types.should be_nil
     end
 
