@@ -76,6 +76,7 @@ Spec::Runner.configure do |config|
   end      
         
   def load_plugin_classes
+    require "lib/notification_system"
     require "lib/notification_system/user_extension"
     require "lib/notification_system/notification"  
     require "lib/notification_system/event"
