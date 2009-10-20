@@ -79,6 +79,7 @@ Spec::Runner.configure do |config|
     require "lib/notification_system/user_extension"
     require "lib/notification_system/notification"  
     require "lib/notification_system/event"
+    require "lib/notification_system/view_helpers"    
     include NotificationSystem
   end
   

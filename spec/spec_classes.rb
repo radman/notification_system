@@ -44,3 +44,8 @@ class CoachingSession < ActiveRecord::Base
     NewCoachingSessionEvent.create! :source => self
   end
 end
+
+# For Testing Helpers
+class ClassWithHelpers
+  include ViewHelpers
+end

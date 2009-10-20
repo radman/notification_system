@@ -16,6 +16,7 @@ TODO
 6. title syntax sugar on notification classes
 7. view helpers
 8. properly test subclasses method on notification model
+9. follow proper guidelines for plugins: http://guides.rubyonrails.org/plugins.html
 
 Installation
 ------------
