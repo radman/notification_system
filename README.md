@@ -12,6 +12,7 @@ TODO
 2. add recurring notifications
 3. figure out how to integrate with flash notifications
 4. add real 'instant' notifications (some schedulers use cron, for which the smallest interval is 1 minute)
+5. provide a sample schedule.rb file (for whenever) ??
 
 Installation
 ------------
