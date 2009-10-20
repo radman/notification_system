@@ -25,11 +25,7 @@ module NotificationSystem
       end
 
       def subclasses
-        classes = []
-        ObjectSpace.each_object(Class) do |cls|
-          classes << cls if cls.superclass == self
-        end
-        classes
+        @subclasses || load_subclasses
       end
       
       def mailer
@@ -43,6 +39,14 @@ module NotificationSystem
       def template_name
         return self.to_s.underscore
       end      
+      
+      private
+      
+      def load_subclasses
+        Dir[RAILS_ROOT+'app/models/notifications/*_notification.rb'].each do |file|
+          @subclasses << File.basename(file, '.rb').camelize.constantize
+        end
+      end
     end
     
   end
