@@ -127,13 +127,4 @@ describe "Notification" do
     end
   end
 
-  describe "subclasses method" do
-    it "should get all and only subclasses of Notification class" do
-      subclasses = Notification.subclasses
-      subclasses.size.should == 3
-      subclasses.should include(RandomNotification)
-      subclasses.should include(UpcomingCoachingSessionNotification)
-      subclasses.should include(NewCoachingSessionNotification)
-    end
-  end
 end

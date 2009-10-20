@@ -15,6 +15,7 @@ TODO
 5. provide a sample schedule.rb file (for whenever) ??
 6. title syntax sugar on notification classes
 7. view helpers
+8. properly test subclasses method on notification model
 
 Installation
 ------------
