@@ -13,6 +13,8 @@ TODO
 3. figure out how to integrate with flash notifications
 4. add real 'instant' notifications (some schedulers use cron, for which the smallest interval is 1 minute)
 5. provide a sample schedule.rb file (for whenever) ??
+6. title syntax sugar on notification classes
+7. view helpers
 
 Installation
 ------------
