@@ -11,9 +11,10 @@ module NotificationSystem
       notification && notification.recipient == self && 
       !notification_types.nil? && 
       !notification_types.empty? && 
-      notification_types.include?(notification.class.to_s.underscore.to_sym)
+        (notification_types.include?(notification.class.to_s.underscore.to_sym) ||
+         notification_types.include?(notification.class.to_s.underscore))
     end
-    
+        
     private
     
     # TODO: clean this method up
