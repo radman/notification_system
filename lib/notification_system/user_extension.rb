@@ -16,7 +16,7 @@ module NotificationSystem
     end
     
     def notification_types=(val)
-      val == "" ? super(nil) : super(val)
+      val == [''] ? super(nil) : super(val)
     end
         
     private
@@ -27,8 +27,8 @@ module NotificationSystem
       is_an_array = !self.notification_types.is_a?(Array)
       
       if !self.notification_types.nil?
-        if !self.notification_types.is_a?(Array) && (!self.notification_types == "")
-          errors.add :notification_types, " must either be nil an empty string or an array of symbols to notification subclasses of Notification"
+        if !self.notification_types.is_a?(Array)
+          errors.add :notification_types, " must either be nil or an array of symbols to notification subclasses of Notification"
         elsif !self.notification_types.empty?
           # INVARIANT: notification_types is a non-empty array
           if !self.notification_types.select { |x| !x.is_a?(Symbol) && !x.is_a?(String) }.empty? # check that it's only symbols/strings

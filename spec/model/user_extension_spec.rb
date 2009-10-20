@@ -32,15 +32,10 @@ describe "UserExtension" do
       radu = User.new :notification_types => []
       radu.should be_valid
     end
-
-    it "should be valid if notification_types is set to an empty string" do
-      radu = User.new :notification_types => ""
-      radu.should be_valid      
-    end
     
-    it "setting it to an empty string should make it nil" do
+    it "setting it to an empty string array should make it nil" do
       radu = User.new
-      radu.notification_types = ""
+      radu.notification_types = ['']
       radu.notification_types.should be_nil
     end
 
