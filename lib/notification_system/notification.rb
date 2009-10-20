@@ -25,7 +25,7 @@ module NotificationSystem
       end
 
       def subclasses
-        @subclasses || load_subclasses
+        @subclasses ||= load_subclasses
       end
       
       def mailer
@@ -43,8 +43,8 @@ module NotificationSystem
       private
       
       def load_subclasses
-        Dir[RAILS_ROOT+'app/models/notifications/*_notification.rb'].each do |file|
-          @subclasses << File.basename(file, '.rb').camelize.constantize
+        Dir[File.join(RAILS_ROOT, 'app', 'models', 'notifications', '*')].collect do |file|
+          File.basename(file, '.rb').camelize.constantize
         end
       end
     end
