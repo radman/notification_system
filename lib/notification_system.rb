@@ -1,4 +1,5 @@
 require 'action_view'
+require 'action_controller'
 
 $: << File.expand_path(__FILE__).split('/')[0..-3].join('/') # append plugin root to load path
 
@@ -10,11 +11,16 @@ module NotificationSystem
   
   class << self
     def enable_view_helpers
-      return if ActionView::Base.instance_methods.include? 'notification_settings_form_for'     
+      return if ActionView::Base.instance_methods.include? 'notification_settings_form_for'
       ActionView::Base.class_eval { include NotificationSystem::ViewHelpers }
+    end
+    
+    def enable_views
+      ActionController::Base.view_paths.unshift(File.expand_path(__FILE__).split('/')[0..-3].join('/') + '/lib/app/views')
     end
   end
 end
 
 
 NotificationSystem.enable_view_helpers
+NotificationSystem.enable_views
