@@ -3,14 +3,15 @@ Notification System
 
 The Noomii notification system!
 
-Note: This plugin does not handle scheduling.
+Note: This plugin does NOT handle scheduling. Use another plugin such as "whenever" or "backgroundrb" for scheduling.
 
 TODO
 ----
 
 1. improve this README file
-2. add recurring notification
+2. add recurring notifications
 3. figure out how to integrate with flash notifications
+4. add real 'instant' notifications (some schedulers use cron, for which the smallest interval is 1 minute)
 
 Installation
 ------------
