@@ -13,17 +13,17 @@ describe "UserExtension" do
       radu.should_not be_valid
     end
 
-    it "should be invalid if notification_types is an array that contains anything other than symbols" do
+    it "should be invalid if notification_types is an array that contains anything other than symbols/strings" do
       radu = User.new :notification_types => ["radu", :coolness, "another string", 1234]
       radu.should_not be_valid    
     end
 
-    it "should be invalid if notification_types is an array of symbols but at least one of the symbols references the Notification class" do
+    it "should be invalid if notification_types is an array of symbols/strings but at least one of the symbols/strings references the Notification class" do
       radu = User.new :notification_types => [:notification, :new_coaching_session_notification]
       radu.should_not be_valid    
     end  
 
-    it "should be invalid if notification_types is an array of symbols but at least one of the symbols references an class that does not inherit from Notification" do
+    it "should be invalid if notification_types is an array of symbols/strings but at least one of the symbols/strings references an class that does not inherit from Notification" do
       radu = User.new :notification_types => [:object, :new_coaching_session_notification]
       radu.should_not be_valid    
     end

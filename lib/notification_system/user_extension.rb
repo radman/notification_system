@@ -21,39 +21,48 @@ module NotificationSystem
         
     private
     
-    # TODO: clean this method up
+
+    ###################################
+    ## VALIDATION HELPERS
+    ###################################
+    
+    # TODO: measure performance
     def notification_types_are_valid
-      is_nil = self.notification_types.nil?
-      is_an_array = !self.notification_types.is_a?(Array)
-      
-      if !self.notification_types.nil?
-        if !self.notification_types.is_a?(Array) && !(self.notification_types == [''])
-          errors.add :notification_types, " must either be nil or an array of symbols to notification subclasses of Notification"
-        elsif !self.notification_types.empty?
-          # INVARIANT: notification_types is a non-empty array
-          if !self.notification_types.select { |x| !x.is_a?(Symbol) && !x.is_a?(String) }.empty? # check that it's only symbols/strings
-            errors.add :notification_types, " must either be nil or an array of symbols corresponding to subclasses of Notification" 
-          else
-            # INVARIANT: notification_types is a non-empty array of symbols/strings
-            invalid_references = self.notification_types.select do |x|
-              begin
-                cls = Module.const_get(x.to_s.classify)
-                cls == Notification || !cls.ancestors.include?(Notification)
-              rescue NameError
-                true
-              end
-            end
-            
-            if !invalid_references.empty?
-              errors.add :notification_types, " must either be nil or an array of symbols corresponding to subclasses of Notification"
-            end             
-          end
-        end
-      end      
+      unless self.notification_types.nil? || is_notification_type_array?(self.notification_types)
+        errors.add :notification_types, 'must either be nil or an array of symbols/strings corresponding to subtypes of Notification'
+      end
     end
     
     def notification_types_changed?
       self.changed.include?('notification_types')
     end    
+
+
+    ###################################
+    ## OTHER METHODS
+    ###################################
+    
+    def is_notification_type_array?(obj)
+      obj.is_a?(Array) && obj.select { |x| references_notification_type?(x) }.size == obj.size
+    end
+    
+    def references_notification_type?(obj)
+      return false unless is_symbol?(obj) || is_non_empty_string?(obj)
+      
+      begin
+        defined?(obj.to_s.camelize.constantize) && 
+        obj.to_s.camelize.constantize.superclass == Notification
+      rescue NameError
+        return false
+      end
+    end
+    
+    def is_symbol?(obj)
+      obj.is_a?(Symbol)
+    end
+    
+    def is_non_empty_string?(obj)
+      obj.is_a?(String) && !obj.blank?
+    end
   end
 end
