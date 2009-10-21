@@ -16,7 +16,8 @@ module NotificationSystem
     end
     
     def notification_types=(val)
-      val == [''] ? super(nil) : super(val)
+      val.delete('') if val.is_a?(Array) && val.include?('')
+      super(val)
     end
         
     private
