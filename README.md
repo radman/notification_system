@@ -5,19 +5,6 @@ The Noomii notification system!
 
 Note: This plugin does NOT handle scheduling. Use another plugin such as "whenever" or "backgroundrb" for scheduling.
 
-TODO
-----
-
-1. improve this README file
-2. add recurring notifications
-3. figure out how to integrate with flash notifications
-4. add real 'instant' notifications (some schedulers use cron, for which the smallest interval is 1 minute)
-5. provide a sample schedule.rb file (for whenever) ??
-6. title syntax sugar on notification classes
-7. view helpers
-8. properly test subclasses method on notification model
-9. follow proper guidelines for plugins: http://guides.rubyonrails.org/plugins.html
-
 Installation
 ------------
 
@@ -86,7 +73,7 @@ Notifications require a recipient and a date, and can optionally be associated t
 
     = notification_settings_form_for @user, ...
     
-You can use all the same params as on `form_for`, except that you cannot supply a  block
+You can use all the same params as on `form_for`, except that you cannot supply a block
 
 
 Copyright (c) 2009 Radu Vlad, released under the MIT license
