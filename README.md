@@ -80,5 +80,13 @@ Notifications require a recipient and a date, and can optionally be associated t
 ### Notification Subscription ###
 
     user.notification_types = [:new_comment_notification, :tagged_in_photo_notification]
+    user.is_subscribed_to_notification_type?('new_comment_notification')
+    
+### Notification Subscription Settings Form ###
+
+    = notification_settings_form_for @user, ...
+    
+You can use all the same params as on `form_for`, except that you cannot supply a  block
+
 
 Copyright (c) 2009 Radu Vlad, released under the MIT license
