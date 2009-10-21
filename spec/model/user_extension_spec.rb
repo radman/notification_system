@@ -91,6 +91,10 @@ describe "UserExtension" do
   end
   
   describe "subscribed_to_notification_type?(notification_type)" do
+    it "should return false if notification types is nil" do
+      radu = User.create! :notification_types => nil
+      radu.is_subscribed_to_notification_type?('blah').should be_false
+    end
     it "should return false if notification types array does not contain symbol corresponding to given string" do
       radu = User.create! :notification_types => [:new_coaching_session_notification]
       radu.is_subscribed_to_notification_type?('blah').should be_false
