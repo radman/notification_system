@@ -28,6 +28,11 @@ module NotificationSystem
         @types ||= load_types
       end
       
+      
+      def subscribable_types
+        types.select { |type| !type.title.nil? }
+      end      
+      
       def mailer
         @mailer || :notification_mailer
       end
@@ -39,6 +44,11 @@ module NotificationSystem
       def template_name
         return self.to_s.underscore
       end      
+      
+      def title
+        # This method should be overriden in subclasses to indicate that this is a subscribable class,
+        # and to have a nice title displayed on the settings form
+      end
       
       private
       

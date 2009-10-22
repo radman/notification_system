@@ -1,3 +1,7 @@
 class <%= class_name %>Notification < NotificationSystem::Notification
-
+  # Override title method if you want this to be a subscribable notification
+  # The method should return a string, which will be displayed on the notification settings form
+  # def self.title
+  #
+  # end
 end
