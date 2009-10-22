@@ -127,4 +127,17 @@ describe "Notification" do
     end
   end
 
+  describe "syntax sugar" do
+    describe "title set via class method" do
+      before(:all) do
+        class CoolNotification < NotificationSystem::Notification
+          title 'coolest notification ever'
+        end
+      end
+
+      it "should return the same title when accessed" do
+        CoolNotification.title.should == 'coolest notification ever'
+      end
+    end
+  end
 end

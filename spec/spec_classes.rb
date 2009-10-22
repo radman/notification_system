@@ -1,16 +1,8 @@
 require 'action_mailer'
 
 # Notifications
-class RandomNotification < NotificationSystem::Notification
-  def title
-    "notify me randomly"
-  end
-end
-class UpcomingCoachingSessionNotification < NotificationSystem::Notification
-  def title 
-    "you have a coaching session coming up"
-  end
-end
+class RandomNotification < NotificationSystem::Notification; end
+class UpcomingCoachingSessionNotification < NotificationSystem::Notification; end
 class NewCoachingSessionNotification < NotificationSystem::Notification; end
 
 # Events

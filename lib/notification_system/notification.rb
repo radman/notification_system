@@ -13,7 +13,7 @@ module NotificationSystem
 
     class << self
       attr_accessor :mailer
-             
+                   
       def deliver_pending
         pending.each do |notification|
           if notification.recipient.wants_notification?(notification) 
@@ -26,8 +26,7 @@ module NotificationSystem
 
       def types
         @types ||= load_types
-      end
-      
+      end      
       
       def subscribable_types
         types.select { |type| !type.title.nil? }
@@ -45,9 +44,8 @@ module NotificationSystem
         return self.to_s.underscore
       end      
       
-      def title
-        # This method should be overriden in subclasses to indicate that this is a subscribable class,
-        # and to have a nice title displayed on the settings form
+      def title(title=nil)
+        title.nil? ? @title : @title = title
       end
       
       private
