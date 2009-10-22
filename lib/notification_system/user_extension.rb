@@ -18,7 +18,8 @@ module NotificationSystem
     def is_subscribed_to_notification_type?(notification_type)
       return false unless self.notification_types
       self.notification_types.include?(notification_type) ||
-      self.notification_types.include?(notification_type.to_sym)
+      self.notification_types.include?(notification_type.to_s.to_sym) ||
+      self.notification_types.include?(notification_type.to_s.underscore.to_sym)
     end
       
     def notification_types=(val)
