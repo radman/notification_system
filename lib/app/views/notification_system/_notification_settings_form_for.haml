@@ -5,6 +5,6 @@
   - notification_types.each do |notification_type|
     %div
       = check_box_tag 'user[notification_types][]', notification_type, current_user.is_subscribed_to_notification_type?(notification_type), :id => notification_type
-      = label_tag notification_type.to_s.classify.constantize.title
+      = label_tag notification_type, notification_type.to_s.classify.constantize.title
       
   %div= submit_tag

@@ -21,6 +21,5 @@ module NotificationSystem
   end
 end
 
-
 NotificationSystem.enable_view_helpers
 NotificationSystem.enable_views
