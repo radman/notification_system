@@ -50,6 +50,16 @@ This will generate `app/models/notifications/new_comment_notification.rb`
 
 This will generate `app/models/events/new_user_event.rb`
 
+### Validating Event Source Type ###
+
+    class CoolEvent < NotificationSystem::Event
+      validates_source_type :user
+    end
+    
+If the type of the source is not user, this add an error to the event instance: "source is not an instance of User".
+
+TODO: explain better
+
 ### Triggering Events ###
 
     NewUserEvent.trigger :source => source_object, :arg1 => 'blah', :arg2 => [1,2,3], ..., :argn => 'wow'
