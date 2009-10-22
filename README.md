@@ -20,6 +20,8 @@ A notification represents a bunch of information scheduled to be delivered to a 
 
 A notification is considered pending on and after its scheduled delivery date, if it has not been sent. Notifications are NOT sent automatically. You will need to use a scheduler of some sort to periodically call `Notification.deliver_pending`. This will grab all pending notifications, and deliver them to their recipients IF they are subscribed to receive that type of notification. IF they are not subscribed, the pending notification is destroyed.
 
+Only notifications that have titles specified are considered subscribable. (TODO: somewhat iffy.. maybe change this in the future)
+
 Delivery assumes the existence of a `NotificationMailer`. To modify the mailer do something like the following:
 
     NotificationSystem::Notification.mailer = :user_mailer
@@ -73,6 +75,14 @@ TODO: explain better
 Notifications require a recipient and a date, and can optionally be associated to an event.
 
     NewCommentNotification.create! :recipient => some_user, :date => Time.now, :event => random_event_instance
+
+### Notification Titles ###
+
+    class NewCommentOnYourArticleNotification < NotificationSystem::Notification
+      title 'someone commented on your article'
+    end
+    
+These are the titles that will be displayed on the notification settings form. Specifying a title makes a notification subscribable.
 
 ### Notification Subscription ###
 
