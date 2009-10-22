@@ -30,5 +30,24 @@ describe "Event" do
         RandomEvent.first.data[:a_string].should == 'radu was here'
       end
     end
+
+    describe "validates_source_type class method" do
+      before(:all) do
+        class ValidatedEvent < NotificationSystem::Event
+          validates_source_type :coaching_relationship
+        end
+      end
+      
+      it "should be invalid if the source's class doesn't match the specified source_type" do
+        e = ValidatedEvent.trigger :source => User.create!
+        e.errors.on(:source).should include('must be an instance of CoachingRelationship')
+      end
+      
+      it "should be valid if the source's class matches the specified source_type" do
+        e = ValidatedEvent.trigger :source => CoachingRelationship.create!
+        e.should be_valid
+      end      
+    end
+
   end
 end
