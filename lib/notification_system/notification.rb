@@ -47,6 +47,10 @@ module NotificationSystem
       def title(title=nil)
         title.nil? ? @title : @title = title
       end
+
+      def group(group=nil)
+        group.nil? ? @group : @group = group
+      end
       
       private
       
