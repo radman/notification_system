@@ -76,13 +76,17 @@ Notifications require a recipient and a date, and can optionally be associated t
 
     NewCommentNotification.create! :recipient => some_user, :date => Time.now, :event => random_event_instance
 
-### Notification Titles ###
+### Notification Groups and Titles ###
 
     class NewCommentOnYourArticleNotification < NotificationSystem::Notification
-      title 'someone commented on your article'
+      group 'Comments'
+      title 'Someone commented on your article'
     end
     
 These are the titles that will be displayed on the notification settings form. Specifying a title makes a notification subscribable.
+
+Specifying a group will organize your notification settings form into groups. If you specify at least one group, then all notifications
+without a group will be organized under 'Other'.
 
 ### Notification Subscription ###
 
