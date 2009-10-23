@@ -4,7 +4,8 @@
 - groups.each do |group_title, notification_types|
   %table
     %tbody  
-      - unless groups.size == 1 && group_title.nil? # Don't display a header if only one unnamed group
+      - # Don't display a header if only one unnamed group
+      - unless groups.size == 1 && group_title.nil?
         %tr
           %th{ :colspan => 2 }= group_title || 'Other'
 

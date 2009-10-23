@@ -7,8 +7,8 @@ class AddNotificationSystem < ActiveRecord::Migration
     end
     
     create_table :notifications do |t|
-      t.integer :recipient_id, :event_id
-      t.datetime :date, :sent_at
+      t.integer :recipient_id, :event_id, :interval
+      t.datetime :date, :sent_at, :end_date
       t.string :type
       t.timestamps
     end
