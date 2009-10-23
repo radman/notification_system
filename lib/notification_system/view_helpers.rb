@@ -1,6 +1,6 @@
 module NotificationSystem
   module ViewHelpers
-    def notification_settings_form_for(record_or_name_or_array, *args)
+    def notification_settings
       groups = {}
       
       Notification.subscribable_types.each do |subscribable_type|
@@ -8,10 +8,7 @@ module NotificationSystem
         groups[subscribable_type.group] << subscribable_type
       end
       
-      render 'notification_system/notification_settings_form_for', 
-        :record_or_name_or_array => record_or_name_or_array, 
-        :args => args,
-        :groups => groups
+      render 'notification_system/notification_settings', :groups => groups
     end
   end  
 end
