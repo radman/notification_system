@@ -240,7 +240,22 @@ describe "Notification" do
       
       2.times { RandomNotification.create! :recipient => User.create!, :date => Time.now }
       
-      RandomNotification.sent.should have(10).records      
+      RandomNotification.sent.should have(10).records
     end
+  end
+  
+  describe "subscribable" do
+    it "should be subscribable if it has a title" do
+      class NotificationWithTitle < NotificationSystem::Notification
+        title 'a title'
+      end
+      
+      NotificationWithTitle.should be_subscribable      
+    end
+    
+    it "should not be subscribable if it does not have a title" do
+      class NotificationWithoutTitle < NotificationSystem::Notification; end
+      NotificationWithoutTitle.should_not be_subscribable
+    end    
   end
 end

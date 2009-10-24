@@ -38,7 +38,11 @@ module NotificationSystem
       end      
       
       def subscribable_types
-        @subscribable_types ||= load_types.select { |type| !type.title.nil? }
+        @subscribable_types ||= load_types.select { |type| type.subscribable? }
+      end
+      
+      def subscribable?
+        !self.title.nil?
       end      
       
       def mailer
