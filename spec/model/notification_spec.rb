@@ -96,20 +96,37 @@ describe "Notification" do
     end
     
     # TODO: notification.deliver should send an email via NotificationMailer.deliver_notification_template_name(self)
-    it "deliver should send an email via mailer_class.deliver_[template_name](notification)" do
+    it "deliver should send an email via mailer_class.deliver_[template_name](notification) if subscribed" do
       Notification.mailer = :user_mailer
-      notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
+      notification = NewCoachingSessionNotification.create! :recipient => User.create!(:notification_types => [:new_coaching_session_notification]), :date => Time.now
       UserMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
       notification.deliver
     end
-    
-    it "deliver should set the sent_at field to the current time" do
-      notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
+
+    it "deliver should set the sent_at field to the current time if subscribed" do
+      notification = NewCoachingSessionNotification.create! :recipient => User.create!(:notification_types => [:new_coaching_session_notification]), :date => Time.now
       notification.deliver
       notification.sent_at.should == Time.now
     end
+    
+    it "deliver should not send the notification if recipient not subscribed" do
+      Notification.mailer = :user_mailer
+      notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
+      UserMailer.should_not_receive(:deliver_new_coaching_session_notification).with(notification)
+      notification.deliver
+    end
+    
+    it "deliver should not destroy notification if recipient not subscribed" do
+      Notification.mailer = :user_mailer
+      notification = NewCoachingSessionNotification.create! :recipient => User.create!, :date => Time.now
+      UserMailer.should_not_receive(:deliver_new_coaching_session_notification).with(notification)
+      notification.deliver
+      Notification.find_by_id(notification.id).should be_nil
+    end    
+    
   end
 
+  # this tests too much; we should just test that it calls deliver for each pending notification
   describe "delivering pending notifications" do
     before(:each) do
       @radu = User.create! :notification_types => [:new_coaching_session_notification, :upcoming_coaching_session_notification]
@@ -162,16 +179,31 @@ describe "Notification" do
     end
   end
 
-  describe "recurrent notifications" do
-    describe "recurrent? instance method" do
-      it "should return true if interval > 0" do
-        notification = Notification.create! :recipient => User.create!, :date => Time.now, :interval => 0
-        notification.should_not be_recurrent
+  describe "recurrent? instance method" do
+    it "should return true if interval > 0" do
+      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now, :interval => 0
+      notification.should_not be_recurrent
+    end
+    
+    it "should return false if interval = 0" do
+      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now, :interval => 10
+      notification.should be_recurrent
+    end
+  end
+  
+  describe "recurrent notifications" do    
+    describe "when delivered" do
+      describe "and does not have a recurrence_end_date" do
+        it "should create another notification with same type, recipient, event, interval, and with date increased by the interval" do
+          user = User.create! :notification_types => [:random_notification]
+          event = RandomEvent.create!
+          notification = RandomNotification.create! :recipient => user, :date => Time.now, :interval => 10.days, :event => event
+          notification.deliver
+          RandomNotification.exists?(:date => Time.now + 10.days, :interval => 10.days, :recipient_id => user.id, :event_id => event.id).should be_true
+        end
       end
       
-      it "should return false if interval = 0" do
-        notification = Notification.create! :recipient => User.create!, :date => Time.now, :interval => 10
-        notification.should be_recurrent
+      describe "and has a recurrence_end_date" do
       end
     end
   end

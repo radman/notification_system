@@ -7,10 +7,14 @@ module NotificationSystem
     validate :interval_is_at_least_zero
         
     named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
-        
+            
     def deliver
-      Notification.mailer_class.send("deliver_#{self.class.template_name}", self)
-      self.update_attributes!(:sent_at => Time.now)
+      if self.recipient.wants_notification?(self)
+        Notification.mailer_class.send("deliver_#{self.class.template_name}", self)      
+        self.update_attributes!(:sent_at => Time.now)
+      else
+        self.destroy
+      end
     end
     
     def recurrent?
@@ -22,11 +26,7 @@ module NotificationSystem
                    
       def deliver_pending
         pending.each do |notification|
-          if notification.recipient.wants_notification?(notification) 
-            notification.deliver
-          else
-            notification.destroy
-          end
+          notification.deliver
         end
       end
 
