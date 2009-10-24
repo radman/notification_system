@@ -76,19 +76,17 @@ Notifications require a recipient and a date, and can optionally be associated t
 
     NewCommentNotification.create! :recipient => some_user, :date => Time.now, :event => random_event_instance
 
-### Recurrent Notifications ###
+### Recurrences ###
 
-A notification is considered recurrent iff. its `interval` is greater than zero. If you specify a non-zero interval, the notification will create a copy of itself everytime it is sent (except that `date` will be set to `date + interval`). This will happen regardless of whether the recipient is subscribed to the notification or not. The interval is specified in seconds.
+Recurrences must have a positive non-zero interval (specified in seconds). A recurrence can be associated to a notification as follows:
 
-    notification.interval = 1.week
-    
-If you want the recurrence to end at a particular time, specify an end_date.
+    notification.recurrence = Recurrence.create! :interval => 1.week, :end_date => Time.now + 1.year
 
-    notification.end_date = Time.now + 2.years    
-    
-To find out whether a particular notification is recurrent:
+A notification is defined as recurrent if it is associated to a recurrence. To find out whether a notification is recurrent call
 
-    do_stuff if notification.recurrent?
+    notification.recurrent?
+
+If an `end_date` is not specified the notification will recur forever.
 
 ### Notification Groups and Titles ###
 
