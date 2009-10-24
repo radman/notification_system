@@ -56,6 +56,7 @@ Spec::Runner.configure do |config|
   def reset_tables
     NotificationSystem::Event.delete_all
     NotificationSystem::Notification.delete_all
+    NotificationSystem::Recurrence.delete_all    
 
     CoachingRelationship.delete_all
     CoachingSession.delete_all

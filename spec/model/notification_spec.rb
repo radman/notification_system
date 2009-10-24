@@ -20,28 +20,7 @@ describe "Notification" do
     notification = Notification.new :recipient => User.create!, :date => Time.now
     notification.should be_valid
   end
-  
-  it "interval should be set to 0 by default" do
-    notification = Notification.new :recipient => User.create!, :date => Time.now
-    notification.interval.should == 0
-  end
-  
-  it "should be invalid if interval is set to a value less than zero" do
-    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => -10
-    notification.valid?
-    notification.should_not be_valid
-  end
-  
-  it "should be valid if interval is set to 0" do
-    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => 0
-    notification.should be_valid
-  end
-  
-  it "should be valid if interval is greater than 0" do
-    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => 10
-    notification.should be_valid  
-  end
-  
+    
   describe "pending" do
     # a notification is pending if current_time >= notification.date
     # notification.date : when the notification is scheduled to be sent
@@ -180,52 +159,52 @@ describe "Notification" do
   end
 
   describe "recurrent? instance method" do
-    it "should return true if interval > 0" do
-      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now, :interval => 0
-      notification.should_not be_recurrent
+    it "should return true if it has a recurrence" do
+      recurrence = Recurrence.create! :interval => 1
+      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now, :recurrence => recurrence
+      notification.should be_recurrent
     end
     
-    it "should return false if interval = 0" do
-      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now, :interval => 10
-      notification.should be_recurrent
+    it "should return false if it does not have a recurrence" do
+      notification = RandomNotification.create! :recipient => User.create!, :date => Time.now
+      notification.should_not be_recurrent
     end
   end
   
   describe "recurrent notifications" do    
     describe "when delivered" do
-      describe "and does not have a recurrence_end_date" do
+      before(:each) do
+        @user = User.create!
+        @event = RandomEvent.create!
+        @recurrence = Recurrence.create! :interval => 10.days
+        @notification = RandomNotification.create! :date => Time.now, :recurrence => @recurrence, :recipient => @user, :event => @event
+      end
+      
+      describe "and its recurrence does not have a recurrence_end_date" do
         it "should create another notification with same type, recipient, event, interval, and with date increased by the interval" do
-          user = User.create! :notification_types => [:random_notification]
-          event = RandomEvent.create!
-          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recipient => user, :event => event
-          notification.deliver
-          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i).should be_true
+          @notification.recurrence.update_attributes(:end_date => nil)
+          @notification.deliver
+          RandomNotification.exists?(:date => Time.now + @recurrence.interval, :recipient_id => @user.id, :event_id => @event.id, :recurrence_id => @recurrence.id).should be_true
         end
       end
       
-      describe "and has a recurrence_end_date" do
+      describe "and its recurrence has an end date" do
         it "should not create another notification if date+end_date > recurrence_end_date" do
-          user = User.create! :notification_types => [:random_notification]
-          event = RandomEvent.create!          
-          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 5.days, :recipient => user, :event => event          
-          notification.deliver
-          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i).should be_false
+          @notification.recurrence.update_attributes(:end_date => Time.now + @recurrence.interval - 1)
+          @notification.deliver
+          RandomNotification.exists?(:date => Time.now + @recurrence.interval, :recipient_id => @user.id, :event_id => @event.id, :recurrence_id => @recurrence.id).should be_false
         end  
           
         it "should create another notification with same type, recipient, event, interval, and with date increased by the interval, if date+end_date < recurrence_end_date" do
-          user = User.create! :notification_types => [:random_notification]
-          event = RandomEvent.create!          
-          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 11.days, :recipient => user, :event => event          
-          notification.deliver
-          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i, :recurrence_end_date => Time.now + 11.days).should be_true
+          @notification.recurrence.update_attributes(:end_date => Time.now + @recurrence.interval + 1)
+          @notification.deliver
+          RandomNotification.exists?(:date => Time.now + @recurrence.interval, :recipient_id => @user.id, :event_id => @event.id, :recurrence_id => @recurrence.id).should be_true
         end
-        
+
         it "should create another notification with same type, recipient, event, interval, and with date increased by the interval, if date+end_date = recurrence_end_date" do
-          user = User.create! :notification_types => [:random_notification]
-          event = RandomEvent.create!          
-          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 10.days, :recipient => user, :event => event          
-          notification.deliver
-          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i, :recurrence_end_date => Time.now + 10.days).should be_true
+          @notification.recurrence.update_attributes(:end_date => Time.now + @recurrence.interval)
+          @notification.deliver
+          RandomNotification.exists?(:date => Time.now + @recurrence.interval, :recipient_id => @user.id, :event_id => @event.id, :recurrence_id => @recurrence.id).should be_true
         end     
       end
     end

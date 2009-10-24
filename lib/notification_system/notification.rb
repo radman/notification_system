@@ -2,9 +2,9 @@ module NotificationSystem
   class Notification < ActiveRecord::Base
     belongs_to :recipient, :class_name => 'User'
     belongs_to :event, :class_name => 'NotificationSystem::Event'
+    belongs_to :recurrence, :class_name => 'NotificationSystem::Recurrence'
     
     validates_presence_of :recipient_id, :date
-    validate :interval_is_at_least_zero
         
     named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
     named_scope :sent,    lambda { { :conditions => ['sent_at IS NOT NULL'] } }
@@ -21,7 +21,7 @@ module NotificationSystem
     end
     
     def recurrent?
-      self.interval > 0
+      !self.recurrence.nil?
     end
 
     class << self
@@ -76,17 +76,15 @@ module NotificationSystem
     
     private
     
-    def interval_is_at_least_zero
-      errors.add :interval, 'must be greater than or equal to zero' if self.interval < 0
-    end
-    
+    # PRE: self.recurrent?
     def create_next_notification
-      if recurrence_end_date
-        if recurrence_end_date - (date + interval) >= 0
-          self.class.create! :date => date + interval, :interval => interval, :recurrence_end_date => recurrence_end_date, :recipient => recipient, :event => event
-        end
-      else
-        self.class.create! :date => date + interval, :interval => interval, :recipient => recipient, :event => event
+      if !recurrence.end_date || recurrence.end_date - (date + recurrence.interval) >= 0
+        self.class.create!(
+          :date => date + self.recurrence.interval, 
+          :recurrence => recurrence,
+          :recipient => recipient, 
+          :event => event          
+        )
       end
     end
   end
