@@ -4,7 +4,7 @@ class AddNotificationSystem < ActiveRecord::Migration
       t.string :type
       
       t.string  :source_type
-      t.ingeger :source_id
+      t.integer :source_id
       
       t.string  :data
 
@@ -16,15 +16,24 @@ class AddNotificationSystem < ActiveRecord::Migration
 
       t.integer   :recipient_id
       t.integer   :event_id
+
+      # these will be moved to :recurrences
+      t.integer   :interval, :default => 0
+      t.datetime  :recurrence_end_date      
+      
+      # one above two lines are removed, uncomment this line
+      # t.integer   :recurrence_id      
       
       t.datetime  :date
       t.datetime  :sent_at
-      
-      t.integer   :interval, :default => 0
-      t.datetime  :recurrence_end_date
-      
+            
       t.timestamps      
     end
+    
+    # create_table :recurrences do |t|
+    #   t.integer   :interval, :default => 0
+    #   t.datetime  :recurrence_end_date
+    # end
     
     change_table :users do |t|
       t.string :notification_types
