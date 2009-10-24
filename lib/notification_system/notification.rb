@@ -9,6 +9,8 @@ module NotificationSystem
     named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
             
     def deliver
+      create_next_notification if recurrent?
+      
       if self.recipient.wants_notification?(self)
         Notification.mailer_class.send("deliver_#{self.class.template_name}", self)      
         self.update_attributes!(:sent_at => Time.now)
@@ -71,6 +73,16 @@ module NotificationSystem
     
     def interval_is_at_least_zero
       errors.add :interval, 'must be greater than or equal to zero' if self.interval < 0
-    end        
+    end
+    
+    def create_next_notification
+      if recurrence_end_date
+        if recurrence_end_date - (date + interval) >= 0
+          self.class.create! :date => date + interval, :interval => interval, :recurrence_end_date => recurrence_end_date, :recipient => recipient, :event => event
+        end
+      else
+        self.class.create! :date => date + interval, :interval => interval, :recipient => recipient, :event => event
+      end
+    end
   end
 end

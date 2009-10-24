@@ -15,6 +15,7 @@ Spec::Runner.configure do |config|
     setup_generators
     load_plugin_classes
     load_spec_classes
+    set_default_time_zone
     stub_current_time
   end
 
@@ -68,6 +69,10 @@ Spec::Runner.configure do |config|
   
   def teardown_generators
     FileUtils.rm_r(fake_rails_root) if File.exists?(fake_rails_root)
+  end
+  
+  def set_default_time_zone
+    ActiveRecord::Base.default_timezone = :utc    
   end
 
   def stub_current_time

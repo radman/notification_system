@@ -197,13 +197,36 @@ describe "Notification" do
         it "should create another notification with same type, recipient, event, interval, and with date increased by the interval" do
           user = User.create! :notification_types => [:random_notification]
           event = RandomEvent.create!
-          notification = RandomNotification.create! :recipient => user, :date => Time.now, :interval => 10.days, :event => event
+          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recipient => user, :event => event
           notification.deliver
-          RandomNotification.exists?(:date => Time.now + 10.days, :interval => 10.days, :recipient_id => user.id, :event_id => event.id).should be_true
+          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i).should be_true
         end
       end
       
       describe "and has a recurrence_end_date" do
+        it "should not create another notification if date+end_date > recurrence_end_date" do
+          user = User.create! :notification_types => [:random_notification]
+          event = RandomEvent.create!          
+          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 5.days, :recipient => user, :event => event          
+          notification.deliver
+          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i).should be_false
+        end  
+          
+        it "should create another notification with same type, recipient, event, interval, and with date increased by the interval, if date+end_date < recurrence_end_date" do
+          user = User.create! :notification_types => [:random_notification]
+          event = RandomEvent.create!          
+          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 11.days, :recipient => user, :event => event          
+          notification.deliver
+          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i, :recurrence_end_date => Time.now + 11.days).should be_true
+        end
+        
+        it "should create another notification with same type, recipient, event, interval, and with date increased by the interval, if date+end_date = recurrence_end_date" do
+          user = User.create! :notification_types => [:random_notification]
+          event = RandomEvent.create!          
+          notification = RandomNotification.create! :date => Time.now, :interval => 10.days, :recurrence_end_date => Time.now + 10.days, :recipient => user, :event => event          
+          notification.deliver
+          RandomNotification.exists?(:date => Time.now + 10.days, :recipient_id => user.id, :event_id => event.id, :interval => 10.days.to_i, :recurrence_end_date => Time.now + 10.days).should be_true
+        end     
       end
     end
   end
