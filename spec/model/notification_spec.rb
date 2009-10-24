@@ -245,17 +245,39 @@ describe "Notification" do
   end
   
   describe "subscribable" do
-    it "should be subscribable if it has a title" do
-      class NotificationWithTitle < NotificationSystem::Notification
+    before(:all) do
+      class SubscribableNotification < NotificationSystem::Notification
         title 'a title'
       end
-      
-      NotificationWithTitle.should be_subscribable      
+
+      class UnsubscribableNotification < NotificationSystem::Notification; end
+           
+    end
+    
+    it "should be subscribable if it has a title" do      
+      SubscribableNotification.should be_subscribable      
     end
     
     it "should not be subscribable if it does not have a title" do
-      class NotificationWithoutTitle < NotificationSystem::Notification; end
-      NotificationWithoutTitle.should_not be_subscribable
-    end    
+      UnsubscribableNotification.should_not be_subscribable
+    end
+    
+    it "should always be delivered if not subscribable" do
+      unsubscribed_user = User.create!
+      subscribed_user = User.create! :notification_types => [:unsubscribable_notification]
+      UnsubscribableNotification.create! :recipient => subscribed_user, :date => Time.now
+      UnsubscribableNotification.create! :recipient => unsubscribed_user, :date => Time.now
+      Notification.deliver_pending
+      Notification.sent.should have(2).records
+    end
+    
+    it "should only be delivered if subscribed to, if subscribable" do
+      unsubscribed_user = User.create!
+      subscribed_user = User.create! :notification_types => [:subscribable_notification]
+      SubscribableNotification.create! :recipient => subscribed_user, :date => Time.now
+      SubscribableNotification.create! :recipient => unsubscribed_user, :date => Time.now
+      Notification.deliver_pending
+      Notification.sent.should have(1).record
+    end
   end
 end

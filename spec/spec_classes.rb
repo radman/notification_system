@@ -1,14 +1,20 @@
 require 'action_mailer'
 
 # Notifications
-class RandomNotification < NotificationSystem::Notification; end
-class UpcomingCoachingSessionNotification < NotificationSystem::Notification; end
-class NewCoachingSessionNotification < NotificationSystem::Notification; end
+class RandomNotification < NotificationSystem::Notification
+  title 'random notification'
+end
+class UpcomingCoachingSessionNotification < NotificationSystem::Notification
+  title 'upcoming coaching session'
+end
+class NewCoachingSessionNotification < NotificationSystem::Notification
+  title 'new coaching session'
+end
 
 # Events
 class RandomEvent < NotificationSystem::Event; end
   
-class NewCoachingSessionEvent < NotificationSystem::Event
+class NewCoachingSessionEvent < NotificationSystem::Event  
   def after_create
     coaching_session = self.source
     coaching_relationship = coaching_session.coaching_relationship
