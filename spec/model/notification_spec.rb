@@ -21,6 +21,27 @@ describe "Notification" do
     notification.should be_valid
   end
   
+  it "interval should be set to 0 by default" do
+    notification = Notification.new :recipient => User.create!, :date => Time.now
+    notification.interval.should == 0
+  end
+  
+  it "should be invalid if interval is set to a value less than zero" do
+    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => -10
+    notification.valid?
+    notification.should_not be_valid
+  end
+  
+  it "should be valid if interval is set to 0" do
+    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => 0
+    notification.should be_valid
+  end
+  
+  it "should be valid if interval is greater than 0" do
+    notification = Notification.new :recipient => User.create!, :date => Time.now, :interval => 10
+    notification.should be_valid  
+  end
+  
   describe "pending" do
     # a notification is pending if current_time >= notification.date
     # notification.date : when the notification is scheduled to be sent
@@ -137,6 +158,20 @@ describe "Notification" do
 
       it "should return the same title when accessed" do
         CoolNotification.title.should == 'coolest notification ever'
+      end
+    end
+  end
+
+  describe "recurrent notifications" do
+    describe "recurrent? instance method" do
+      it "should return true if interval > 0" do
+        notification = Notification.create! :recipient => User.create!, :date => Time.now, :interval => 0
+        notification.should_not be_recurrent
+      end
+      
+      it "should return false if interval = 0" do
+        notification = Notification.create! :recipient => User.create!, :date => Time.now, :interval => 10
+        notification.should be_recurrent
       end
     end
   end

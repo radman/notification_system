@@ -4,11 +4,17 @@ module NotificationSystem
     belongs_to :event, :class_name => 'NotificationSystem::Event'
     
     validates_presence_of :recipient_id, :date
+    validate :interval_is_at_least_zero
+        
     named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
         
     def deliver
       Notification.mailer_class.send("deliver_#{self.class.template_name}", self)
       self.update_attributes!(:sent_at => Time.now)
+    end
+    
+    def recurrent?
+      self.interval > 0
     end
 
     class << self
@@ -61,5 +67,10 @@ module NotificationSystem
       end
     end
     
+    private
+    
+    def interval_is_at_least_zero
+      errors.add :interval, 'must be greater than or equal to zero' if self.interval < 0
+    end        
   end
 end
