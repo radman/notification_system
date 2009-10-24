@@ -80,7 +80,7 @@ Notifications require a recipient and a date, and can optionally be associated t
 
 Recurrences must have a positive non-zero interval (specified in seconds). A recurrence can be associated to a notification as follows:
 
-    notification.recurrence = Recurrence.create! :interval => 1.week, :end_date => Time.now + 1.year
+    notification.recurrence = Recurrence.create! :interval => 1.week, :end_date => 1.year.from_now
 
 A notification is defined as recurrent if it is associated to a recurrence. To find out whether a notification is recurrent call
 
