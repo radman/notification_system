@@ -230,4 +230,17 @@ describe "Notification" do
       end
     end
   end
+
+  describe "sent" do
+    it "should be considered sent if it's sent_at attribute is not nil" do
+      10.times do
+        n = RandomNotification.create! :recipient => User.create!(:notification_types => [:random_notification]), :date => Time.now
+        n.deliver
+      end
+      
+      2.times { RandomNotification.create! :recipient => User.create!, :date => Time.now }
+      
+      RandomNotification.sent.should have(10).records      
+    end
+  end
 end

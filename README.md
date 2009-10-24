@@ -111,4 +111,9 @@ without a group will be organized under 'Other'.
 
     = notification_settings_for @user
     
+### Notification Named Scopes ###
+
+    Notification.pending
+    Notification.sent
+
 Copyright (c) 2009 Radu Vlad, released under the MIT license

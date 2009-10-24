@@ -7,6 +7,7 @@ module NotificationSystem
     validate :interval_is_at_least_zero
         
     named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
+    named_scope :sent,    lambda { { :conditions => ['sent_at IS NOT NULL'] } }
             
     def deliver
       create_next_notification if recurrent?
