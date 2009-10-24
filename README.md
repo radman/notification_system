@@ -86,7 +86,7 @@ A notification is defined as recurrent if it is associated to a recurrence. To f
 
     notification.recurrent?
 
-If an `end_date` is not specified the notification will recur forever.
+Once sent, a recurrent notification will schedule a copy of itself as defined in the recurrence. If an `end_date` is not specified the notification will recur forever.
 
 ### Notification Groups and Titles ###
 
