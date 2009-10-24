@@ -55,10 +55,10 @@ This will generate `app/models/events/new_user_event.rb`
 ### Validating Event Source Type ###
 
     class CoolEvent < NotificationSystem::Event
-      validates_source_type :user
+      source_type :user
     end
     
-If the type of the source is not user, this add an error to the event instance: "source is not an instance of User".
+This will ensure that the source's class is validated. If the type of the source is not User, this will add an error to the event instance: "source is not an instance of User".
 
 TODO: explain better
 

@@ -32,10 +32,10 @@ describe "Event" do
     end
 
     describe "syntax sugar" do
-      describe "validates_source_type" do
+      describe "source_type" do
         before(:all) do
           class ValidatedEvent < NotificationSystem::Event
-            validates_source_type :coaching_relationship
+            source_type :coaching_relationship
           end
         end
       
