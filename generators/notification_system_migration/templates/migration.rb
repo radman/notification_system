@@ -17,13 +17,6 @@ class AddNotificationSystem < ActiveRecord::Migration
       t.integer   :recipient_id
       t.integer   :event_id
       t.integer   :recurrence_id
-
-      # these will be moved to :recurrences
-      t.integer   :interval, :default => 0
-      t.datetime  :recurrence_end_date      
-      
-      # one above two lines are removed, uncomment this line
-      # t.integer   :recurrence_id      
       
       t.datetime  :date
       t.datetime  :sent_at
