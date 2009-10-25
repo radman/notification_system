@@ -1,7 +1,7 @@
 require 'machinist/active_record'
 
-User.blueprint do
-end
+User.blueprint {}
+Comment.blueprint {}
 
 RandomNotification.blueprint do
   recipient { User.make }
@@ -12,3 +12,4 @@ NotificationTypeSubscription.blueprint do
   notification_type { 'RandomNotification' }
   subscriber { User.make }
 end
+

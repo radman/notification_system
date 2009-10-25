@@ -32,6 +32,7 @@ Spec::Runner.configure do |config|
     ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')    
     ActiveRecord::Schema.define(:version => 1) do    
       create_table :users do |t|; end
+      create_table :comments do |t|; end
 
       create_table :coaching_relationships do |t|
         t.integer :coach_id, :coachee_id
@@ -59,6 +60,7 @@ Spec::Runner.configure do |config|
     NotificationSystem::Recurrence.delete_all    
     NotificationSystem::NotificationTypeSubscription.delete_all
 
+    Comment.delete_all
     CoachingRelationship.delete_all
     CoachingSession.delete_all
     User.delete_all 
@@ -93,7 +95,7 @@ Spec::Runner.configure do |config|
   
   def load_spec_classes
     require "spec/spec_classes"
-    require "blueprints"
+    require "spec/blueprints"
   end
   
   def load_notification_system_migration

@@ -12,6 +12,10 @@ class NewCoachingSessionNotification < NotificationSystem::Notification
 end
 
 # Events
+class EventWithCommentSourceType < NotificationSystem::Event
+  source_type :comment
+end
+
 class RandomEvent < NotificationSystem::Event; end
   
 class NewCoachingSessionEvent < NotificationSystem::Event  
@@ -49,6 +53,9 @@ class CoachingSession < ActiveRecord::Base
   def after_create
     NewCoachingSessionEvent.create! :source => self
   end
+end
+
+class Comment < ActiveRecord::Base
 end
 
 # For Testing Helpers
