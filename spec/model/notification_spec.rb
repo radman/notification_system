@@ -77,13 +77,17 @@ describe "Notification" do
     # TODO: notification.deliver should send an email via NotificationMailer.deliver_notification_template_name(self)
     it "deliver should send an email via mailer_class.deliver_[template_name](notification) if subscribed" do
       Notification.mailer = :user_mailer
-      notification = NewCoachingSessionNotification.create! :recipient => User.create!(:notification_types => [:new_coaching_session_notification]), :date => Time.now
+      user = User.create!
+      user.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'NewCoachingSessionNotification')
+      notification = NewCoachingSessionNotification.create! :recipient => user, :date => Time.now
       UserMailer.should_receive(:deliver_new_coaching_session_notification).with(notification)
       notification.deliver
     end
 
     it "deliver should set the sent_at field to the current time if subscribed" do
-      notification = NewCoachingSessionNotification.create! :recipient => User.create!(:notification_types => [:new_coaching_session_notification]), :date => Time.now
+      user = User.create!
+      user.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'NewCoachingSessionNotification')
+      notification = NewCoachingSessionNotification.create! :recipient => user, :date => Time.now
       notification.deliver
       notification.sent_at.should == Time.now
     end
@@ -108,7 +112,9 @@ describe "Notification" do
   # this tests too much; we should just test that it calls deliver for each pending notification
   describe "delivering pending notifications" do
     before(:each) do
-      @radu = User.create! :notification_types => [:new_coaching_session_notification, :upcoming_coaching_session_notification]
+      @radu = User.create!
+      @radu.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'NewCoachingSessionNotification')
+      @radu.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'UpcomingCoachingSessionNotification')
       
       @pending_wanted = []
       @pending_unwanted = []
@@ -213,7 +219,9 @@ describe "Notification" do
   describe "sent" do
     it "should be considered sent if it's sent_at attribute is not nil" do
       10.times do
-        n = RandomNotification.create! :recipient => User.create!(:notification_types => [:random_notification]), :date => Time.now
+        u = User.create!
+        u.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'RandomNotification')
+        n = RandomNotification.create! :recipient => u, :date => Time.now
         n.deliver
       end
       
@@ -251,8 +259,9 @@ describe "Notification" do
     end
     
     it "should only be delivered if subscribed to, if subscribable" do
-      unsubscribed_user = User.create!
-      subscribed_user = User.create! :notification_types => [:subscribable_notification]
+      unsubscribed_user = User.create!      
+      subscribed_user = User.create!
+      subscribed_user.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => 'SubscribableNotification')      
       SubscribableNotification.create! :recipient => subscribed_user, :date => Time.now
       SubscribableNotification.create! :recipient => unsubscribed_user, :date => Time.now
       Notification.deliver_pending

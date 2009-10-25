@@ -57,6 +57,7 @@ Spec::Runner.configure do |config|
     NotificationSystem::Event.delete_all
     NotificationSystem::Notification.delete_all
     NotificationSystem::Recurrence.delete_all    
+    NotificationSystem::NotificationTypeSubscription.delete_all
 
     CoachingRelationship.delete_all
     CoachingSession.delete_all
@@ -92,6 +93,7 @@ Spec::Runner.configure do |config|
   
   def load_spec_classes
     require "spec/spec_classes"
+    require "blueprints"
   end
   
   def load_notification_system_migration
@@ -106,5 +108,3 @@ Spec::Runner.configure do |config|
     Dir.glob(File.join(fake_rails_root, '**', '*'))
   end  
 end
-
-
