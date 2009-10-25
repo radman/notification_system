@@ -7,7 +7,7 @@ module NotificationSystem
   
     def interval_is_at_least_zero
       return unless interval
-      errors.add :interval, 'must be greater than or equal to zero' if interval < 0
+      errors.add :interval, 'must be greater than zero' if interval < 0
     end          
   end
 end

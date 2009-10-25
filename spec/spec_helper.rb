@@ -14,7 +14,7 @@ Spec::Runner.configure do |config|
     setup_database
     setup_generators
     load_plugin_classes
-    load_spec_classes
+    load_spec_classes_and_blueprints
     set_default_time_zone
     stub_current_time
   end
@@ -93,9 +93,9 @@ Spec::Runner.configure do |config|
     include NotificationSystem
   end
   
-  def load_spec_classes
+  def load_spec_classes_and_blueprints
     require "spec/spec_classes"
-    require "spec/blueprints"
+    require "spec/spec_blueprints"
   end
   
   def load_notification_system_migration
