@@ -78,6 +78,8 @@ Notifications require a recipient and a date, and can optionally be associated t
 
 ### Recurrences ###
 
+*(WILL CHANGE VERY SOON -- RECURRENCES WILL INSTEAD BE ASSOCIATED TO SUBSCRIPTIONS)*
+
 Recurrences must have a positive non-zero interval (specified in seconds). A recurrence can be associated to a notification as follows:
 
     notification.recurrence = Recurrence.create! :interval => 1.week, :end_date => 1.year.from_now
@@ -102,7 +104,8 @@ without a group will be organized under 'Other'.
 
 ### Notification Subscription ###
 
-    user.notification_types = [:new_comment_notification, :tagged_in_photo_notification]
+    NotificationTypeSubscription.create! :subscriber => radu, :notification_type => 'CoolNotification'
+    user.notification_type_subscriptions << ...
     user.is_subscribed_to_notification_type?('new_comment_notification')
     
 ### Notification Subscription Settings ###
