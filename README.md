@@ -110,6 +110,8 @@ without a group will be organized under 'Other'.
     
 ### Notification Subscription Settings ###
 
+*(TODO: This form is currently broken because of recent changes to the way subscriptions are stored)*
+
     = notification_settings_for @user
     
 ### Notification Named Scopes ###
