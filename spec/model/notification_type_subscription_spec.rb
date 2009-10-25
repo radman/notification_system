@@ -26,7 +26,8 @@ describe 'NotificationTypeSubscription' do
   end
   
   it 'should be valid if a subscriber and a notification type that\'s a subclass of Notification are specified' do
-    s = NotificationTypeSubscription.make :notification_type => 'RandomNotification', :subscriber => User.create!
+    s = NotificationTypeSubscription.make_unsaved :notification_type => 'RandomNotification', :subscriber => User.make
+    s.save
     s.should be_valid
   end  
 end

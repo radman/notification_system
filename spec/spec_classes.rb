@@ -4,15 +4,13 @@ require 'action_mailer'
 class RandomNotification < NotificationSystem::Notification
   title 'random notification'
 end
-class UpcomingCoachingSessionNotification < NotificationSystem::Notification
-  title 'upcoming coaching session'
-end
-class NewCoachingSessionNotification < NotificationSystem::Notification
-  title 'new coaching session'
-end
 class NewCommentNotification < NotificationSystem::Notification
   title 'new comment'
 end
+class NotificationWithTitle < NotificationSystem::Notification
+  title 'notification with title'
+end
+class NotificationWithoutTitle < NotificationSystem::Notification; end
 
 # Events
 class EventWithCommentSourceType < NotificationSystem::Event
@@ -20,23 +18,6 @@ class EventWithCommentSourceType < NotificationSystem::Event
 end
 
 class RandomEvent < NotificationSystem::Event; end
-  
-class NewCoachingSessionEvent < NotificationSystem::Event  
-  def after_create
-    coaching_session = self.source
-    coaching_relationship = coaching_session.coaching_relationship
-
-    other_user = (coaching_session.creator == coaching_relationship.coach) ? 
-      coaching_relationship.coachee :
-      coaching_relationship.coach    
-    
-    NewCoachingSessionNotification.create! :date => Time.now, :recipient => other_user, :event => self
-    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach, :event => self
-    UpcomingCoachingSessionNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee, :event => self
-    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coach, :event => self
-    RandomNotification.create! :date => coaching_session.date - 1.day, :recipient => coaching_relationship.coachee, :event => self
-  end
-end
 
 # User Extensions        
 class User < ActiveRecord::Base
@@ -44,20 +25,6 @@ class User < ActiveRecord::Base
 end
 
 # Sample Classes
-class CoachingRelationship < ActiveRecord::Base
-  belongs_to :coach, :class_name => 'User'
-  belongs_to :coachee, :class_name => 'User'
-end
-
-class CoachingSession < ActiveRecord::Base
-  belongs_to :coaching_relationship
-  belongs_to :creator, :class_name => 'User'
-  
-  def after_create
-    NewCoachingSessionEvent.create! :source => self
-  end
-end
-
 class Comment < ActiveRecord::Base
 end
 

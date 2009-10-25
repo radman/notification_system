@@ -7,6 +7,7 @@ NotificationSystem::NotificationTypeSubscription.blueprint do
 end
 
 User.blueprint {}
+RandomEvent.blueprint {}
 
 RandomNotification.blueprint do
   recipient { User.make }

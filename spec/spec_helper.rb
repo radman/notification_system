@@ -8,8 +8,11 @@ $: << NOTIFICATION_ROOT
 require 'active_record'
 require 'rails_generator'
 require 'rails_generator/scripts/generate'
+require 'mocha'
 
 Spec::Runner.configure do |config|
+  config.mock_with :mocha  
+  
   config.before(:suite) do
     setup_database
     setup_generators
@@ -61,8 +64,6 @@ Spec::Runner.configure do |config|
     NotificationSystem::NotificationTypeSubscription.delete_all
 
     Comment.delete_all
-    CoachingRelationship.delete_all
-    CoachingSession.delete_all
     User.delete_all 
   end
 
@@ -81,7 +82,7 @@ Spec::Runner.configure do |config|
 
   def stub_current_time
     current_time = Time.now
-    Time.stub!(:now).and_return(current_time)
+    Time.stubs(:now).returns(current_time)
   end      
         
   def load_plugin_classes

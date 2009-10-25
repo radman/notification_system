@@ -11,7 +11,7 @@ module NotificationSystem
     end
     
     def wants_notification?(notification)
-      notification.recipient == self && is_subscribed_to_notification_type?(notification.type)
+      notification.recipient == self && (!notification.class.subscribable? || is_subscribed_to_notification_type?(notification.type))
     end
     
     def is_subscribed_to_notification_type?(notification_type)
