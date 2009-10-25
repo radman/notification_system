@@ -10,6 +10,9 @@ end
 class NewCoachingSessionNotification < NotificationSystem::Notification
   title 'new coaching session'
 end
+class NewCommentNotification < NotificationSystem::Notification
+  title 'new comment'
+end
 
 # Events
 class EventWithCommentSourceType < NotificationSystem::Event
