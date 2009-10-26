@@ -6,7 +6,15 @@ module NotificationSystem
        
     def [](index)
       return nil if index < 0
-      (occurs_at = starts_at + index * interval) > ends_at ? nil : occurs_at
+
+      offset = ((updated_at - starts_at) / interval).ceil
+      puts offset
+      if ends_at.nil?
+        starts_at + (index + offset) * interval
+      else
+        occurs_at = starts_at + (index + offset) * interval 
+        occurs_at > ends_at ? nil : occurs_at
+      end
     end
     
     private      

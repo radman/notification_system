@@ -26,7 +26,9 @@ describe 'Recurrence' do
   
   describe '[](index) instance method' do
     before(:all) do
-      @recurrence = Recurrence.make :interval => 1.day, :starts_at => Time.now, :ends_at => Time.now + 10.days
+      stub_current_time
+      x = Time.now + 10.days
+      @recurrence = Recurrence.make :interval => 1.day, :starts_at => Time.now.utc, :ends_at => (Time.now + 10.days).utc
     end
     
     it 'should return 1st occurrence if index = 0' do
@@ -48,5 +50,22 @@ describe 'Recurrence' do
     it 'should return nil if the specified occurrence is past the ends_at date' do
       @recurrence[11].should be_nil
     end
+
+    # TODO: clean up below specs, and be more thorough
+    describe 'if updated 2 days later to an interval of 12.hours' do
+      it 'should have starts_at + 2.days as its first occurrence' do
+        Time.stubs(:now).returns(@recurrence.created_at + 2.days)
+        @recurrence.update_attributes(:interval => 12.hours)
+        @recurrence[0].should == @recurrence.starts_at + 2.days
+      end
+    end
+    
+    describe 'if updated 2 days and a few minutes later to an interval of 12.hours' do
+      it 'should have starts_at + 2.days + 12.hours as its first occurrence' do
+        Time.stubs(:now).returns(@recurrence.created_at + 2.days + 3.minutes)
+        @recurrence.update_attributes(:interval => 12.hours)
+        @recurrence[0].should == @recurrence.starts_at + 2.days + 12.hours
+      end
+    end    
   end
 end

@@ -29,5 +29,18 @@ describe 'NotificationTypeSubscription' do
     s = NotificationTypeSubscription.make_unsaved :notification_type => 'RandomNotification', :subscriber => User.make
     s.save
     s.should be_valid
-  end  
+  end
+
+  describe 'notifications association' do
+    it 'should return all notifications of type self.notification_type in which self.subscriber is a recipient' do
+      radu = User.make
+      subscription = NotificationTypeSubscription.make :subscriber => radu, :notification_type => 'RandomNotification'
+
+      10.times { RandomNotification.make :recipient => radu }
+      5.times { RandomNotification.make :recipient => User.make }
+      5.times { NewCommentNotification.make :recipient => radu }
+      
+      subscription.notifications.should have(10).records
+    end
+  end
 end

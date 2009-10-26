@@ -1,7 +1,8 @@
 module NotificationSystem
   class NotificationTypeSubscription < ActiveRecord::Base
     belongs_to :subscriber, :class_name => 'User'
-    
+    belongs_to :recurrence, :class_name => 'NotificationSystem::Recurrence'
+        
     validates_presence_of :subscriber, :notification_type
     validate :notification_type_is_valid
     
@@ -9,7 +10,32 @@ module NotificationSystem
     def notification_type=(notification_type)
       super(notification_type.to_s)
     end
+        
+    # something doesn't seem right about this; mainly that it's only used for recurrent subscriptions
+    # UNTESTED (except via integration tests)
+    has_many :notifications, 
+      :primary_key => 'notification_type', 
+      :foreign_key => 'type', 
+      :conditions => ['recipient_id = #{self.send(:subscriber_id)}'] # delay evaluation of #{} by putting it in single quotes
+      
+    def create_scheduled_notifications
+      return unless recurrence
+      
+      t = Time.now
+      x = notifications.created_after(recurrence.updated_at).count
+
+      while (d = recurrence[x]) && t >= d
+        create_notification_for_date(d)
+        x += 1
+      end
+    end
     
+    def create_notification_for_date(date)
+      notification_type.constantize.create! :recipient => subscriber, :date => date      
+    end
+    
+    ###########################################
+        
     private
     
     def notification_type_is_valid

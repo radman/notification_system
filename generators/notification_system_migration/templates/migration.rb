@@ -16,7 +16,6 @@ class AddNotificationSystem < ActiveRecord::Migration
 
       t.integer   :recipient_id
       t.integer   :event_id
-      t.integer   :recurrence_id
       
       t.datetime  :date
       t.datetime  :sent_at
@@ -26,14 +25,16 @@ class AddNotificationSystem < ActiveRecord::Migration
     
     create_table :notification_type_subscriptions do |t|
       t.integer   :subscriber_id
+      t.integer   :recurrence_id
       t.string    :notification_type
       
       t.timestamps
     end
-    
+        
     create_table :recurrences do |t|
       t.integer   :interval
-      t.datetime  :end_date
+      t.datetime  :starts_at
+      t.datetime  :ends_at
       
       t.timestamps
     end

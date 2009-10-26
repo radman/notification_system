@@ -137,11 +137,12 @@ describe 'Notification' do
       10.times { @pending_notifications << RandomNotification.make }
       Notification.stubs(:pending).returns(@pending_notifications)
     end
-    
+
     it 'should invoke deliver on each pending notification' do
       @pending_notifications.each { |x| x.expects(:deliver).once }
       Notification.deliver_pending
     end
+
   end
      
   describe 'title class method' do
@@ -154,4 +155,10 @@ describe 'Notification' do
     end
   end
 
+  describe 'created_after named scope' do
+    it 'should return all notifications created after a given date' do
+      10.times { |i| n = RandomNotification.make; n.update_attribute(:created_at, Time.now + i.days) }
+      RandomNotification.created_after(Time.now + 5.days).count.should == 4
+    end
+  end
 end
