@@ -5,14 +5,14 @@ module NotificationSystem
     
     validates_presence_of :recipient, :date
         
-    named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now] } }
+    named_scope :pending, lambda { { :conditions => ['sent_at IS NULL AND date <= ?', Time.now.utc] } }
     named_scope :sent,    lambda { { :conditions => ['sent_at IS NOT NULL'] } }
-    named_scope :created_after, lambda { |date| { :conditions => ['created_at > ?', date] } }
+    named_scope :created_after, lambda { |date| { :conditions => ['created_at > ?', date.utc] } }
             
     def deliver
       if self.recipient.wants_notification?(self)
         Notification.mailer_class.send("deliver_#{self.class.template_name}", self)      
-        self.update_attributes!(:sent_at => Time.now)
+        self.update_attributes!(:sent_at => Time.now.utc)
       else
         self.destroy
       end

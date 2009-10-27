@@ -17,13 +17,13 @@ module NotificationSystem
       :primary_key => 'notification_type', 
       :foreign_key => 'type', 
       :conditions => ['recipient_id = #{self.send(:subscriber_id)}'], # delay evaluation of #{} by putting it in single quotes
-      :class_name => 'NotificationSystem::Notification'      
+      :class_name => 'NotificationSystem::Notification'
       
     def create_scheduled_notifications
       return unless recurrence
       
-      t = Time.now.utc
-      x = notifications.created_after(recurrence.updated_at.utc).count
+      t = Time.now.utc # NOTE: this conversion might not be necessary (we're not dealing with sql)
+      x = notifications.created_after(recurrence.updated_at).count
 
       while (d = recurrence[x]) && t >= d
         create_notification_for_date(d)
