@@ -1,14 +1,15 @@
-<%- # this is necessary in rails 2.3.4 because we can't send an empty array (see rails docs for check_box_tag) %>
+<% # this is necessary in rails 2.3.4 because we can't send an empty array (see rails docs for check_box_tag) %>
 <%= hidden_field_tag 'user[notification_types][]', '' %>
 
-<%- groups.each do |group_title, notification_types| %>
+<% groups.each do |group_title, notification_types| %>
   <table>
     <tbody>
-      <%- # Don't display a header if only one unnamed group %>
-      <%- unless groups.size == 1 && group_title.nil? %>
+      <% # Don't display a header if only one unnamed group %>
+      <% unless groups.size == 1 && group_title.nil? %>
         <tr><th colspan="2"><%= group_title || 'Other' %></th></tr>
+      <% end %>
 
-      <%- notification_types.each do |notification_type| %>
+      <% notification_types.each do |notification_type| %>
         <tr>
           <td class="notification_title">
             <%= label_tag notification_type.to_s, notification_type.title %>
@@ -17,5 +18,7 @@
             <%= check_box_tag 'user[notification_types][]', notification_type.to_s, user.is_subscribed_to_notification_type?(notification_type.to_s), :id => notification_type.to_s %>
           </td>
         </tr>
+      <% end %>
     </tbody>
   </table>
+<% end %>
