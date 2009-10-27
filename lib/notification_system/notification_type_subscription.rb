@@ -16,7 +16,8 @@ module NotificationSystem
     has_many :notifications, 
       :primary_key => 'notification_type', 
       :foreign_key => 'type', 
-      :conditions => ['recipient_id = #{self.send(:subscriber_id)}'] # delay evaluation of #{} by putting it in single quotes
+      :conditions => ['recipient_id = #{self.send(:subscriber_id)}'], # delay evaluation of #{} by putting it in single quotes
+      :class_name => 'NotificationSystem::Notification'      
       
     def create_scheduled_notifications
       return unless recurrence
