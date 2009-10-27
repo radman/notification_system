@@ -18,7 +18,13 @@ module NotificationSystem
       :foreign_key => 'type', 
       :conditions => ['recipient_id = #{self.send(:subscriber_id)}'], # delay evaluation of #{} by putting it in single quotes
       :class_name => 'NotificationSystem::Notification'
-      
+    
+    def self.create_scheduled_notifications
+      all.each do |subscription|
+        subscription.create_scheduled_notifications
+      end
+    end
+    
     def create_scheduled_notifications
       return unless recurrence
       
