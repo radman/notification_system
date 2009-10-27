@@ -12,4 +12,4 @@
       - notification_types.each do |notification_type|
         %tr
           %td.notification_title= label_tag notification_type.to_s, notification_type.title
-          %td.email_subscription= check_box_tag 'user[notification_types][]', notification_type.to_s, user.is_subscribed_to_notification_type?(notification_type), :id => notification_type.to_s
+          %td.email_subscription= check_box_tag 'user[notification_types][]', notification_type.to_s, user.is_subscribed_to_notification_type?(notification_type.to_s), :id => notification_type.to_s

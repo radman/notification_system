@@ -51,6 +51,10 @@ module NotificationSystem
         return self.to_s.underscore
       end      
       
+      ###################################
+      ## Pretty Syntax For Organization
+      ###################################
+
       def title(title=nil)
         title.nil? ? @title : @title = title
       end
