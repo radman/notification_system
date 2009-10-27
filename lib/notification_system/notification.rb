@@ -59,6 +59,14 @@ module NotificationSystem
         group.nil? ? @group : @group = group
       end
       
+      def recurrent(recurrent=nil)
+        if recurrent.nil?
+          @recurrent == true
+        else
+          @recurrent = recurrent
+        end
+      end      
+      
       private
       
       def load_types

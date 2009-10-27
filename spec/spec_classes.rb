@@ -11,6 +11,19 @@ class NotificationWithTitle < NotificationSystem::Notification
   title 'notification with title'
 end
 class NotificationWithoutTitle < NotificationSystem::Notification; end
+class NotificationWithGroup < NotificationSystem::Notification
+  group 'notification with group'
+end
+class NotificationWithoutGroup < NotificationSystem::Notification; end
+class NotificationWithRecurrentSetToTrue < NotificationSystem::Notification
+  recurrent true
+end
+class NotificationWithRecurrentSetToFalse < NotificationSystem::Notification
+  recurrent false
+end
+class NotificationWithoutRecurrent < NotificationSystem::Notification; end
+
+
 
 # Events
 class EventWithCommentSourceType < NotificationSystem::Event

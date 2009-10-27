@@ -154,6 +154,30 @@ describe 'Notification' do
       NotificationWithTitle.title.should == 'notification with title'
     end
   end
+  
+  describe 'group class method' do
+    it 'should return nil if no title defined' do
+      NotificationWithoutGroup.group.should be_nil
+    end
+    
+    it 'should return the appropriate title if title defined' do
+      NotificationWithGroup.group.should == 'notification with group'
+    end
+  end  
+  
+  describe 'recurrent class method' do
+    it 'should return false if no recurrent defined' do
+      NotificationWithoutRecurrent.group.should be_nil
+    end
+    
+    it 'should return true if recurrent set to true' do
+      NotificationWithRecurrentSetToTrue.recurrent.should be_true
+    end
+
+    it 'should return false if recurrent set to false' do
+      NotificationWithRecurrentSetToFalse.recurrent.should be_false
+    end
+  end  
 
   describe 'created_after named scope' do
     it 'should return all notifications created after a given date' do
