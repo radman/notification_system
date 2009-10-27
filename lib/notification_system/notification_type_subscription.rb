@@ -22,8 +22,8 @@ module NotificationSystem
     def create_scheduled_notifications
       return unless recurrence
       
-      t = Time.now
-      x = notifications.created_after(recurrence.updated_at).count
+      t = Time.now.utc
+      x = notifications.created_after(recurrence.updated_at.utc).count
 
       while (d = recurrence[x]) && t >= d
         create_notification_for_date(d)

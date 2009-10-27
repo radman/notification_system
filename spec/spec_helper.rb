@@ -77,7 +77,7 @@ Spec::Runner.configure do |config|
   end
   
   def set_default_time_zone
-    ActiveRecord::Base.default_timezone = :utc    
+    ActiveRecord::Base.default_timezone = :utc
   end
 
   def stub_current_time
