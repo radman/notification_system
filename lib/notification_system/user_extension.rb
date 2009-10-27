@@ -13,7 +13,7 @@ module NotificationSystem
     end
     
     def is_subscribed_to_notification_type?(notification_type)
-      notification_type_subscriptions.exists?(:notification_type => notification_type)
+      notification_type_subscriptions.exists?(:notification_type => notification_type.to_s)
     end
   end
 end
