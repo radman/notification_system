@@ -8,7 +8,7 @@ module NotificationSystem
       return nil if index < 0
 
       offset = ((updated_at - starts_at) / interval).ceil
-      puts offset
+
       if ends_at.nil?
         starts_at + (index + offset) * interval
       else
