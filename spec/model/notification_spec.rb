@@ -185,4 +185,30 @@ describe 'Notification' do
       RandomNotification.created_after(Time.now + 5.days).count.should == 4
     end
   end
+
+  describe 'types class method' do
+    it 'should return all subclasses of Notification' do
+      Notification.types.collect { |x| x.to_s }.sort.should == %w( 
+          NotificationWithoutRecurrent
+          NotificationWithRecurrentSetToFalse
+          NotificationWithRecurrentSetToTrue
+          NotificationWithoutGroup
+          NotificationWithGroup
+          NotificationWithoutTitle
+          NotificationWithTitle
+          NewCommentNotification
+          RandomNotification 
+      ).sort      
+    end
+  end
+  
+  describe 'subscribable_types class method' do
+    it 'should return all subscribable subclasses of Notification' do
+      Notification.subscribable_types.collect { |x| x.to_s }.sort.should == %w( 
+        NotificationWithTitle
+        NewCommentNotification
+        RandomNotification
+      ).sort
+    end    
+  end
 end

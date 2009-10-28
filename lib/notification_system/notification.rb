@@ -32,7 +32,7 @@ module NotificationSystem
       end      
       
       def subscribable_types
-        @subscribable_types ||= load_types.select { |type| type.subscribable? }
+        @subscribable_types ||= types.select { |type| type.subscribable? }
       end
       
       def subscribable?
@@ -72,11 +72,10 @@ module NotificationSystem
       end      
       
       private
-      
+
+      # PRE-CONDITION: types must be loaded into memory (should be done in init.rb)
       def load_types
-        Dir[File.join(RAILS_ROOT, 'app', 'models', 'notifications', '*')].collect do |file|
-          File.basename(file, '.rb').camelize.constantize
-        end
+        ObjectSpace.enum_for(:each_object, class << NotificationSystem::Notification; self; end).to_a - [NotificationSystem::Notification]
       end
     end
       
