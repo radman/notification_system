@@ -1,0 +1,4 @@
+<% fields_for user do |user_fields| %>
+  <%= user_fields.text_field :first_name %>
+  <%= hidden_field_tag 'notif', 'happyness'%>
+<% end %>
