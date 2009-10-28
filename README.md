@@ -1,3 +1,5 @@
+(THIS README IS OUTDATED)
+
 Notification System
 ===================
 
