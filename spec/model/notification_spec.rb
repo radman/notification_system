@@ -59,7 +59,7 @@ describe 'Notification' do
   end
   
   it 'should not be considered subscribable if it does not have a title' do
-    NotificationWithoutTitle.should_not be_subscribable
+    EmptyNotification.should_not be_subscribable
   end
 
   it 'should have the NotificationMailer as the default mailer' do
@@ -147,7 +147,7 @@ describe 'Notification' do
      
   describe 'title class method' do
     it 'should return nil if no title defined' do
-      NotificationWithoutTitle.title.should be_nil
+      EmptyNotification.title.should be_nil
     end
     
     it 'should return the appropriate title if title defined' do
@@ -156,18 +156,18 @@ describe 'Notification' do
   end
   
   describe 'group class method' do
-    it 'should return nil if no title defined' do
-      NotificationWithoutGroup.group.should be_nil
+    it 'should return nil if no group defined' do
+      EmptyNotification.group.should be_nil
     end
     
-    it 'should return the appropriate title if title defined' do
+    it 'should return the appropriate group if group defined' do
       NotificationWithGroup.group.should == 'notification with group'
     end
   end  
   
   describe 'recurrent class method' do
     it 'should return false if no recurrent defined' do
-      NotificationWithoutRecurrent.group.should be_nil
+      EmptyNotification.recurrent.should be_false
     end
     
     it 'should return true if recurrent set to true' do
@@ -189,12 +189,10 @@ describe 'Notification' do
   describe 'types class method' do
     it 'should return all subclasses of Notification' do
       Notification.types.collect { |x| x.to_s }.sort.should == %w( 
-          NotificationWithoutRecurrent
+          EmptyNotification
           NotificationWithRecurrentSetToFalse
           NotificationWithRecurrentSetToTrue
-          NotificationWithoutGroup
           NotificationWithGroup
-          NotificationWithoutTitle
           NotificationWithTitle
           NewCommentNotification
           RandomNotification 
