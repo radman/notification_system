@@ -42,12 +42,14 @@ module NotificationSystem
         if type_params && type_params[:is_subscribed] == "true"
           # create subscription if one does not exist
           unless self.is_subscribed_to_notification_type?(subscribable_type)
+            self.notification_type_subscriptions << NotificationTypeSubscription.new(:notification_type => subscribable_type.to_s)
+          end
         
           if recurrence_params && recurrence_params[:starts_at] && recurrence_params[:interval]
             subscription = self.notification_type_subscriptions.find_by_notification_type(subscribable_type.to_s)            
-
+            
             recurrence_params[:starts_at] = ActiveSupport::TimeZone[timezone].parse(recurrence_params[:starts_at])
-
+            
             if subscription.recurrence
               subscription.recurrence.update_attributes(recurrence_params)
             else
