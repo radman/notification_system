@@ -38,16 +38,9 @@ class AddNotificationSystem < ActiveRecord::Migration
       
       t.timestamps
     end
-    
-    change_table :users do |t|
-      t.string    :notification_types
-    end
   end
   
   def self.down
-    change_table :users do |t|
-      t.remove    :notification_types
-    end
     drop_table :recurrences
     drop_table :notifications
     drop_table :events

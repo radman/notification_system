@@ -34,17 +34,11 @@ Spec::Runner.configure do |config|
   def setup_database
     ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')    
     ActiveRecord::Schema.define(:version => 1) do    
-      create_table :users do |t|; end
-      create_table :comments do |t|; end
-
-      create_table :coaching_relationships do |t|
-        t.integer :coach_id, :coachee_id
-      end      
+      create_table :users do |t|
+        t.string :timezone
+      end
       
-      create_table :coaching_sessions do |t|
-        t.integer :coaching_relationship_id
-        t.datetime :date
-      end      
+      create_table :comments do |t|; end
 
       load_notification_system_migration && AddNotificationSystem.up
     end

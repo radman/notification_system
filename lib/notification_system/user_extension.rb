@@ -4,7 +4,9 @@ module NotificationSystem
       base.class_eval do
         has_many  :notification_type_subscriptions, 
                   :class_name => 'NotificationSystem::NotificationTypeSubscription', 
-                  :foreign_key => 'subscriber_id'        
+                  :foreign_key => 'subscriber_id'
+        
+        after_update :update_recurrent_subscriptions, :if => :timezone_changed?     
       end
     end
     
@@ -58,6 +60,18 @@ module NotificationSystem
             self.notification_type_subscriptions.find_by_notification_type(subscribable_type.to_s).delete # TODO: this should destroy associated recurrence as well (if it exists)
           end  
         end
+      end
+    end
+  
+    # TODO: untested (except via integration)
+    def timezone_changed?
+      changed.include?('timezone')
+    end
+    
+    # TODO: untested (except via integration) (and this will use the notification class's default settings)
+    def update_recurrent_subscriptions
+      notification_type_subscriptions.recurrent.each do |recurrent_subscription| 
+        recurrent_subscription.recurrence.update_attributes(:starts_at => ActiveSupport::TimeZone[timezone].parse("#{Date.today.to_s} #{recurrent_subscription.notification_type.constantize.time}"))
       end
     end
   end

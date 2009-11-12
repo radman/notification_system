@@ -165,10 +165,6 @@ describe 'Notification' do
     end
   end  
 
-
-
-
-  
   describe '"every" class method' do
     it 'when not called, recurrent? should return false' do
       EmptyNotification.should_not be_recurrent
@@ -196,17 +192,6 @@ describe 'Notification' do
       DailyNotification.time.should == '6:00am'
     end
   end  
-
-
-
-
-
-
-
-
-
-
-
 
   describe 'created_after named scope' do
     it 'should return all notifications created after a given date' do
