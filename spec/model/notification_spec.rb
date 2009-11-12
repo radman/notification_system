@@ -164,20 +164,49 @@ describe 'Notification' do
       NotificationWithGroup.group.should == 'notification with group'
     end
   end  
+
+
+
+
   
-  describe 'recurrent class method' do
-    it 'should return false if no recurrent defined' do
-      EmptyNotification.recurrent.should be_false
-    end
+  describe '"every" class method' do
+    it 'when not called, recurrent? should return false' do
+      EmptyNotification.should_not be_recurrent
+    end 
     
-    it 'should return true if recurrent set to true' do
-      NotificationWithRecurrentSetToTrue.recurrent.should be_true
+    it 'when called, recurrent? should return true' do
+      DailyNotification.should be_recurrent
     end
 
-    it 'should return false if recurrent set to false' do
-      NotificationWithRecurrentSetToFalse.recurrent.should be_false
+    it 'when not called, interval should return nil' do
+      EmptyNotification.interval.should be_nil
+    end
+        
+    it 'when called with a one day interval, interval should return 1.day (in seconds)' do
+      DailyNotification.interval.should == 1.day
+    end
+    
+    it 'when called without an :at option should raise an argument error' do
+      lambda {
+        DailyNotification.every(1.day)
+      }.should raise_error(ArgumentError, 'No time specified in :at attribute')
+    end
+    
+    it 'when called with an :at option set to "6:00am", time should return "6:00am"' do
+      DailyNotification.time.should == '6:00am'
     end
   end  
+
+
+
+
+
+
+
+
+
+
+
 
   describe 'created_after named scope' do
     it 'should return all notifications created after a given date' do
@@ -190,8 +219,7 @@ describe 'Notification' do
     it 'should return all subclasses of Notification' do
       Notification.types.collect { |x| x.to_s }.sort.should == %w( 
           EmptyNotification
-          NotificationWithRecurrentSetToFalse
-          NotificationWithRecurrentSetToTrue
+          DailyNotification
           NotificationWithGroup
           NotificationWithTitle
           NewCommentNotification

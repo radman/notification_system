@@ -17,13 +17,9 @@ end
 class NotificationWithGroup < NotificationSystem::Notification
   group 'notification with group'
 end
-class NotificationWithRecurrentSetToTrue < NotificationSystem::Notification
-  recurrent true
+class DailyNotification < NotificationSystem::Notification
+  every 1.day, :at => '6:00am'
 end
-class NotificationWithRecurrentSetToFalse < NotificationSystem::Notification
-  recurrent false
-end
-
 
 ###################################
 ## Events

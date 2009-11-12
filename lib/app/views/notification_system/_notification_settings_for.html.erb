@@ -20,6 +20,16 @@
             <td class="notification_title">
               <%= label_tag notification_type.to_s, notification_type.title %>
             </td>
+            
+            <% if notification_type.recurrent? %>
+              <td class="hidden_stuff">
+                <% subscription = user.notification_type_subscriptions.find_by_notification_type(notification_type.to_s) %>                
+                <% recurrence = (subscription && subscription.recurrence) || NotificationSystem::Recurrence.new(:interval => notification_type.interval, :starts_at => Time.zone.parse("#{Date.today} #{notification_type.time}")) %>                
+                
+                <%= hidden_field_tag "user[notification_types][#{notification_type.to_s}][recurrence][interval]", recurrence.interval %>
+                <%= hidden_field_tag "user[notification_types][#{notification_type.to_s}][recurrence][starts_at]", recurrence.starts_at %>                
+              </td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

@@ -63,14 +63,21 @@ module NotificationSystem
         group.nil? ? @group : @group = group
       end
       
-      def recurrent(recurrent=nil)
-        if recurrent.nil?
-          @recurrent == true
-        else
-          @recurrent = recurrent
-        end
-      end      
+      ###################################
+      ## Recurrences
+      ###################################
+      attr_reader :interval, :time
+
+      def every(interval, options = {})
+        raise ArgumentError, 'No time specified in :at attribute' if options[:at].nil?
+        @interval = interval
+        @time = options[:at]
+      end
       
+      def recurrent?
+        @interval || false
+      end      
+            
       private
 
       # PRE-CONDITION: types must be loaded into memory (should be done in init.rb)
