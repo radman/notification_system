@@ -6,7 +6,6 @@ module NotificationSystem
     validates_presence_of :subscriber, :notification_type
     validate :notification_type_is_valid
     
-    # TODO: untested
     named_scope :recurrent, :conditions => 'recurrence_id IS NOT NULL'
     
     # TODO: test this method, and decide what it should really allow
