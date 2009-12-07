@@ -43,4 +43,15 @@ describe 'NotificationTypeSubscription' do
       subscription.notifications.should have(10).records
     end
   end
+
+  describe 'recurrent named scope' do
+    it 'should return all subscriptions that are associated to a recurrence' do
+      5.times { NotificationTypeSubscription.make :subscriber => User.make, :notification_type => 'RandomNotification', :recurrence => Recurrence.make }
+      3.times { NotificationTypeSubscription.make }
+      
+      NotificationTypeSubscription.recurrent.should have(5).records
+    end
+  end
+  
+  
 end

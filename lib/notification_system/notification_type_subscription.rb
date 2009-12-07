@@ -39,6 +39,12 @@ module NotificationSystem
         create_notification_for_date(d)
         x += 1
       end
+      
+      # Cases where this fucks up
+      # 1. If we decide to skip a few emails (the skip could be implemented by overriding Notification#deliver)
+      
+      # A better solution is to keep track of when the system tried to send the last one, and then try to send the necessary amount after
+      # this should go on the subscription
     end
 
     # UNTESTED (but should be a private method anyway)    
