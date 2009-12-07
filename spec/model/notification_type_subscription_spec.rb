@@ -53,5 +53,15 @@ describe 'NotificationTypeSubscription' do
     end
   end
   
+  describe 'create_scheduled_notifications class method' do
+    it 'should call create_scheduled_notifications on each recurrent subscription' do
+      5.times { NotificationTypeSubscription.make :recurrence => Recurrence.make }
+      3.times { NotificationTypeSubscription.make }
+      
+      NotificationTypeSubscription.any_instance.expects(:create_scheduled_notifications).times(5)
+      
+      NotificationTypeSubscription.create_scheduled_notifications
+    end
+  end
   
 end

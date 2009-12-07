@@ -7,12 +7,7 @@ module NotificationSystem
     validate :notification_type_is_valid
     
     named_scope :recurrent, :conditions => 'recurrence_id IS NOT NULL'
-    
-    # TODO: test this method, and decide what it should really allow
-    def notification_type=(notification_type)
-      super(notification_type.to_s)
-    end
-        
+            
     # something doesn't seem right about this; mainly that it's only used for recurrent subscriptions
     has_many :notifications, 
       :primary_key => 'notification_type', 
@@ -20,9 +15,8 @@ module NotificationSystem
       :conditions => ['recipient_id = #{self.send(:subscriber_id)}'], # delay evaluation of #{} by putting it in single quotes
       :class_name => 'NotificationSystem::Notification'
 
-    # UNTESTED    
     def self.create_scheduled_notifications
-      all.each do |subscription|
+      recurrent.each do |subscription|
         subscription.create_scheduled_notifications
       end
     end
