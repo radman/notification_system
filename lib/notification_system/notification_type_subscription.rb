@@ -23,26 +23,23 @@ module NotificationSystem
 
     # UNTESTED (except via integration tests)    
     def create_scheduled_notifications
-      return unless recurrence
-      
-      t = Time.now.utc # NOTE: this conversion might not be necessary (we're not dealing with sql)
-      x = notifications.created_after(recurrence.updated_at).count
-
+      t = Time.now.utc
+      x = self.notifications_created_since_recurrence_last_updated_count
+            
       while (d = recurrence[x]) && t >= d
         create_notification_for_date(d)
+        
+        self.notifications_created_since_recurrence_last_updated_count += 1
+        # self.notifications_created_since_recurrence_last_updated_count = y
+        self.save!
+        
         x += 1
-      end
-      
-      # Cases where this fucks up
-      # 1. If we decide to skip a few emails (the skip could be implemented by overriding Notification#deliver)
-      
-      # A better solution is to keep track of when the system tried to send the last one, and then try to send the necessary amount after
-      # this should go on the subscription
+      end            
     end
 
     # UNTESTED (but should be a private method anyway)    
     def create_notification_for_date(date)
-      notification_type.constantize.create! :recipient => subscriber, :date => date      
+      notification_type.constantize.create! :recipient => subscriber, :date => date
     end
     
     ###########################################

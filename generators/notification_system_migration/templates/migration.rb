@@ -28,6 +28,9 @@ class AddNotificationSystem < ActiveRecord::Migration
       t.integer   :recurrence_id
       t.string    :notification_type
       
+      # in development
+      t.integer   :notifications_created_since_recurrence_last_updated_count, :default => 0
+      
       t.timestamps
     end
         
