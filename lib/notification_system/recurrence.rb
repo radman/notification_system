@@ -1,7 +1,7 @@
 module NotificationSystem
   # A recurrence represents a set of fixed times (and thus requires a start date as a point of reference)
   class Recurrence < ActiveRecord::Base
-    has_one :notification_type_subscription # untested
+    has_one :notification_type_subscription, :class_name => 'NotificationSystem::NotificationTypeSubscription' # untested
 
     validates_presence_of :interval, :starts_at
     validate :interval_is_at_least_zero
