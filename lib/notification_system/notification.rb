@@ -23,7 +23,11 @@ module NotificationSystem
                    
       def deliver_pending
         pending.each do |notification|
-          notification.deliver
+          begin
+            notification.deliver
+          rescue Exception => exception
+            NotificationSystem.report_exception(exception)
+          end
         end
       end
 

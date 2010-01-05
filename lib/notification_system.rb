@@ -10,8 +10,12 @@ module NotificationSystem
   autoload :Recurrence,                     'lib/notification_system/recurrence'
   autoload :UserExtension,                  'lib/notification_system/user_extension'
   autoload :ViewHelpers,                    'lib/notification_system/view_helpers'
-  
+    
   class << self
+    def report_exception(exception)
+      # ... TODO: think of a clean way to allow customizable reporting ...
+    end    
+
     def enable_view_helpers
       return if ActionView::Base.instance_methods.include? 'notification_settings_form_for'
       ActionView::Base.class_eval { include NotificationSystem::ViewHelpers }

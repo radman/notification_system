@@ -56,12 +56,25 @@ describe 'NotificationTypeSubscription' do
   describe 'create_scheduled_notifications class method' do
     it 'should call create_scheduled_notifications on each recurrent subscription' do
       5.times { NotificationTypeSubscription.make :recurrence => Recurrence.make }
-      3.times { NotificationTypeSubscription.make }
+      3.times { NotificationTypeSubscription.make } # note: these are not recurrent
       
       NotificationTypeSubscription.any_instance.expects(:create_scheduled_notifications).times(5)
       
       NotificationTypeSubscription.create_scheduled_notifications
     end
+    
+    # ERROR HANDLING (TODO: these tests are not finished)
+    describe 'when an instance method (also called create_scheduled_notifications) fails' do
+      it 'should still try to create the rest' do
+        NotificationTypeSubscription.make :recurrence => Recurrence.make
+        NotificationTypeSubscription.make :recurrence => Recurrence.make
+
+        NotificationTypeSubscription.any_instance.expects(:create_scheduled_notifications).times(2).raises(Exception).then.returns(true)
+        
+        NotificationTypeSubscription.create_scheduled_notifications
+      end
+    end
+    
   end
   
 end

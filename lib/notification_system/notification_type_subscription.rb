@@ -15,13 +15,18 @@ module NotificationSystem
       :conditions => ['recipient_id = #{self.send(:subscriber_id)}'], # delay evaluation of #{} by putting it in single quotes
       :class_name => 'NotificationSystem::Notification'
 
+    # UNTESTED (error handling is not well tested)
     def self.create_scheduled_notifications
       recurrent.each do |subscription|
-        subscription.create_scheduled_notifications
+        begin
+          subscription.create_scheduled_notifications
+        rescue Exception => exception
+          NotificationSystem.report_exception(exception)
+        end
       end
     end
 
-    # UNTESTED (except via integration tests)    
+    # UNTESTED (except via integration tests)
     def create_scheduled_notifications
       t = Time.now.utc
       x = self.notifications_created_since_recurrence_last_updated_count
@@ -30,7 +35,6 @@ module NotificationSystem
         create_notification_for_date(d)
         
         self.notifications_created_since_recurrence_last_updated_count += 1
-        # self.notifications_created_since_recurrence_last_updated_count = y
         self.save!
         
         x += 1
