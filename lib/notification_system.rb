@@ -12,8 +12,9 @@ module NotificationSystem
   autoload :ViewHelpers,                    'lib/notification_system/view_helpers'
     
   class << self
+    # TODO: this needs to be made more customizable
     def report_exception(exception)
-      # ... TODO: think of a clean way to allow customizable reporting ...
+      HoptoadNotifier.notify(exception) if defined?(HoptoadNotifier)
     end    
 
     def enable_view_helpers
