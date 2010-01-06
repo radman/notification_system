@@ -1,5 +1,6 @@
 namespace :notification_system do
   namespace :notifications do
+    # UNTESTED
     desc "Creates and delivers pending notifications"
     task :deliver => :environment do
       begin
