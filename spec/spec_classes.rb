@@ -20,9 +20,6 @@ end
 class DailyNotification < NotificationSystem::Notification
   every 1.day, :at => '6:00am'
 end
-class BadNotification < NotificationSystem::Notification
-  validates_presence_of :non_existent_field
-end
 
 ###################################
 ## Events

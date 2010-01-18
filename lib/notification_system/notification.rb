@@ -79,7 +79,7 @@ module NotificationSystem
       end
       
       def recurrent?
-        @interval || false
+        @interval.present?
       end      
             
       private

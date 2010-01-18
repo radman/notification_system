@@ -203,7 +203,6 @@ describe 'Notification' do
   describe 'types class method' do
     it 'should return all subclasses of Notification' do
       Notification.types.collect { |x| x.to_s }.sort.should == %w( 
-          BadNotification
           EmptyNotification
           DailyNotification
           NotificationWithGroup
