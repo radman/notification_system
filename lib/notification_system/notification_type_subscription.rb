@@ -2,8 +2,10 @@ module NotificationSystem
   class NotificationTypeSubscription < ActiveRecord::Base
     belongs_to :subscriber, :class_name => 'User'
     belongs_to :recurrence, :class_name => 'NotificationSystem::Recurrence'
-        
-    validates_presence_of :subscriber, :notification_type
+    
+    # Replacing validates_presence_of :subscriber_id with custom validation, to debug #2416
+    validates_presence_of :notification_type
+    validate :check_that_subscriber_is_not_nil
     validate :notification_type_is_valid
     
     named_scope :recurrent, :conditions => 'recurrence_id IS NOT NULL'
@@ -49,7 +51,14 @@ module NotificationSystem
     ###########################################
         
     private
-    
+
+    def check_that_subscriber_is_not_nil   
+      if self.subscriber_id.nil?  
+        self.logger.error "\x1B[41mA Subscription type was about to be created without a subscriber\x1B[0m"
+        self.errors.add :subscriber_id, "must be present"
+      end
+    end
+
     def notification_type_is_valid
       errors.add :notification_type, 'must reference a subclass of Notification' unless references_notification_type?(notification_type)
     end
