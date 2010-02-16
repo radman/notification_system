@@ -23,7 +23,7 @@ module NotificationSystem
     
     # UNTESTED
     def after_update
-      return unless self.notification_type_subscription
+      return unless self.notification_type_subscription and not self.changes.empty?
       self.notification_type_subscription.reload
       self.notification_type_subscription.update_attributes!(:notifications_created_since_recurrence_last_updated_count => 0)
     end
