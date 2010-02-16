@@ -54,7 +54,7 @@ module NotificationSystem
 
     def check_that_subscriber_is_not_nil   
       if self.subscriber_id.nil?  
-        self.logger.error "\x1B[41mA Subscription type was about to be created without a subscriber\x1B[0m"
+        self.logger.error "\x1B[41mA Subscription type was about to be created without a subscriber\x1B[0m" if self.logger
         self.errors.add :subscriber_id, "must be present"
       end
     end
