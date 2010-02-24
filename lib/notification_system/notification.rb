@@ -1,3 +1,5 @@
+require 'net/smtp'
+
 module NotificationSystem
   class Notification < ActiveRecord::Base
     belongs_to :recipient, :class_name => 'User'
@@ -25,6 +27,9 @@ module NotificationSystem
         pending.each do |notification|
           begin
             notification.deliver
+          rescue Net::SMTPSyntaxError => exception
+            logger.error "\x1B[41mNotification System: Net::SMTPSyntaxError (recipient_email = #{notification.recipient.email})\x1B[0m" if logger
+            NotificationSystem.report_exception(exception)
           rescue Exception => exception
             NotificationSystem.report_exception(exception)
           end
