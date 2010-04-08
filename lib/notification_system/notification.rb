@@ -28,9 +28,10 @@ module NotificationSystem
           begin
             notification.deliver
           rescue Net::SMTPSyntaxError => exception
-            logger.error "\x1B[41mNotification System: Net::SMTPSyntaxError (recipient_email = #{notification.recipient.email})\x1B[0m" if logger
+            NotificationSystem.log("Net::SMTPSyntaxError (notification_id = #{notification.id})")
             NotificationSystem.report_exception(exception)
           rescue Exception => exception
+            NotificationSystem.log("Exception of type #{exception.class} (notification_id = #{notification.id})")
             NotificationSystem.report_exception(exception)
           end
         end

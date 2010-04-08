@@ -12,6 +12,10 @@ module NotificationSystem
   autoload :ViewHelpers,                    'lib/notification_system/view_helpers'
     
   class << self
+    def log(msg)
+      puts "\x1B[41mNotification System: #{msg}\x1B[0m"
+    end
+
     # TODO: this needs to be made more customizable
     def report_exception(exception)
       HoptoadNotifier.notify(exception) if defined?(HoptoadNotifier)
